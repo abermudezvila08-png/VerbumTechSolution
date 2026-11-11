@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERBUM TECH SOLUTION (VTS) — Infraestructura modular de inteligencia empresarial</title>
+<meta name="description" content="VERBUM TECH SOLUTION (VTS). Infraestructura modular de inteligencia empresarial, tecnología e IA. Presentación institucional internacional. Fundador: Armando Omar Bermúdez Vila.">
+<style>
+:root{
+  --bg:#0a0c0e; --panel:#101317; --ink:#e9e5da; --dim:#918b7c; --faint:#5d5a52;
+  --accent:#c9a24b; --accent2:#7da0c9; --line:rgba(233,229,218,.13);
+  --mono:"SF Mono","Cascadia Mono","Consolas","Courier New",monospace;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--serif);
+  font-size:17px; line-height:1.65;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:72px 72px;
+}
+::selection{background:var(--accent); color:#000}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(201,162,75,.35)}
+a:hover{border-bottom-color:var(--accent)}
+.rail{
+  position:fixed; left:0; top:0; bottom:0; width:60px; z-index:40;
+  border-right:1px solid var(--line); background:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+  padding:22px 0;
+}
+.rail .mark{font-family:var(--mono); font-size:11px; letter-spacing:.35em; writing-mode:vertical-rl; color:var(--dim)}
+.rail .mark b{color:var(--accent); font-weight:400}
+.rail .num{font-family:var(--mono); font-size:10px; color:var(--faint); writing-mode:vertical-rl; letter-spacing:.2em}
+.langbar{
+  position:fixed; top:18px; right:22px; z-index:50; display:flex; gap:2px;
+  font-family:var(--mono); font-size:11px; background:rgba(10,12,14,.85); backdrop-filter:blur(6px);
+  border:1px solid var(--line); padding:3px;
+}
+.langbar button{
+  background:none; border:0; color:var(--dim); font-family:var(--mono); font-size:11px;
+  letter-spacing:.12em; padding:7px 13px; cursor:pointer;
+}
+.langbar button[aria-pressed="true"]{background:var(--accent); color:#0a0c0e}
+.langbar button:hover{color:var(--ink)}
+.page{max-width:940px; margin:0 auto; padding:0 28px 0 104px}
+@media(max-width:720px){ .rail{display:none} .page{padding:0 22px} .langbar{top:12px; right:12px} }
+.lang{display:none}
+.lang.on{display:block}
+header.hero{padding:130px 0 70px; border-bottom:1px solid var(--line)}
+.kicker{font-family:var(--mono); font-size:11px; letter-spacing:.32em; color:var(--accent); text-transform:uppercase}
+.kicker .sep{color:var(--faint); margin:0 10px}
+h1.big{
+  font-size:clamp(42px,7.2vw,86px); line-height:1.02; letter-spacing:-.015em; font-weight:400;
+  margin:26px 0 8px; font-family:var(--serif);
+}
+h1.big .thin{color:var(--faint); font-style:italic}
+.tagline{font-size:clamp(19px,2.4vw,25px); font-style:italic; color:var(--dim); max-width:640px; margin-top:18px}
+.metarow{
+  margin-top:44px; display:flex; flex-wrap:wrap; gap:10px 34px;
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; color:var(--dim);
+}
+.metarow span b{color:var(--ink); font-weight:400}
+section{padding:64px 0; border-bottom:1px solid var(--line)}
+.mod{
+  font-family:var(--mono); font-size:11px; letter-spacing:.28em; color:var(--faint);
+  display:flex; align-items:baseline; gap:16px; margin-bottom:14px;
+}
+.mod .id{color:var(--accent)}
+.mod .ln{flex:1; height:1px; background:var(--line); align-self:center}
+h2{font-size:clamp(26px,3.6vw,40px); font-weight:400; letter-spacing:-.01em; margin-bottom:22px}
+h2 em{color:var(--dim); font-style:italic}
+p.lead{font-size:19px; color:var(--ink); max-width:720px}
+p{color:var(--dim); max-width:720px; margin-bottom:14px}
+p b, li b{color:var(--ink); font-weight:600}
+.note{font-family:var(--sans); font-size:13px; color:var(--faint)}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:30px}
+.cell{border:1px solid var(--line); background:var(--panel); padding:20px 22px}
+.cell h4{font-family:var(--sans); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; font-weight:600}
+.cell p{font-size:15px; margin:0}
+ul.pillars{list-style:none; margin-top:26px; columns:2; column-gap:44px}
+ul.pillars li{break-inside:avoid; padding:10px 0; border-top:1px solid var(--line); color:var(--dim); font-size:15.5px}
+ul.pillars li::before{content:"◈"; color:var(--accent); margin-right:12px; font-size:10px}
+@media(max-width:640px){ ul.pillars{columns:1} }
+.modline{border:1px solid var(--line); background:var(--panel); margin-bottom:14px; padding:20px 22px; display:flex; gap:18px; align-items:baseline; flex-wrap:wrap}
+.modline .code{font-family:var(--mono); font-size:11px; color:var(--faint); letter-spacing:.2em; min-width:64px}
+.modline h3{font-size:21px; font-weight:400; font-family:var(--serif)}
+.modline .desc{width:100%; color:var(--dim); font-size:15px; margin-top:6px}
+.chip{font-family:var(--mono); font-size:10px; letter-spacing:.14em; padding:4px 10px; border:1px solid var(--line); color:var(--dim); white-space:nowrap; margin-left:auto}
+.chip.dev{border-color:rgba(125,160,201,.5); color:var(--accent2)}
+.chip.demo{border-color:rgba(201,162,75,.5); color:var(--accent)}
+table.states{width:100%; border-collapse:collapse; margin-top:26px; font-size:15px}
+table.states td{border-top:1px solid var(--line); padding:10px 14px 10px 0; color:var(--dim)}
+table.states td:first-child{font-family:var(--mono); font-size:11.5px; letter-spacing:.14em; color:var(--ink); white-space:nowrap; width:200px}
+.steps{counter-reset:s; list-style:none; margin-top:26px}
+.steps li{counter-increment:s; display:flex; gap:18px; padding:12px 0; border-top:1px solid var(--line); color:var(--dim); font-size:15.5px}
+.steps li::before{content:counter(s,decimal-leading-zero); font-family:var(--mono); font-size:11px; color:var(--accent); min-width:34px; padding-top:4px}
+.cols3{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:28px}
+.cols3 .cell ul{list-style:none; font-size:14.5px}
+.cols3 .cell li{padding:7px 0; border-top:1px solid var(--line); color:var(--dim)}
+.cols3 .cell li:first-child{border-top:0}
+.footer{padding:70px 0 90px}
+.decl{font-size:19px; font-style:italic; color:var(--ink); max-width:680px; margin-bottom:26px}
+.legal{font-family:var(--sans); font-size:12px; color:var(--faint); max-width:720px; line-height:1.6}
+.signoff{margin-top:40px; font-family:var(--mono); font-size:11px; letter-spacing:.3em; color:var(--faint)}
+.signoff b{color:var(--accent); font-weight:400}
+.cta{border:1px solid var(--accent); display:inline-block; margin-top:34px; padding:14px 30px; font-family:var(--mono); font-size:12px; letter-spacing:.22em; color:var(--accent); text-transform:uppercase}
+.cta:hover{background:var(--accent); color:#0a0c0e}
+</style>
+</head>
+<body>
+<div class="rail"><span class="mark"><b>V</b>T<b>S</b> · EST. MMXXVI</span><span class="num">DOC-01 / NOV 2026</span></div>
+<nav class="langbar" aria-label="Idioma">
+  <button data-lang="es" aria-pressed="true">ES</button>
+  <button data-lang="fr" aria-pressed="false">FR</button>
+  <button data-lang="en" aria-pressed="false">EN</button>
+</nav>
+
+<main class="page">
+
+<!-- ══════════════ ESPAÑOL ══════════════ -->
+<div class="lang on" id="lang-es">
+
+<header class="hero">
+  <div class="kicker">VERBUM TECH SOLUTION<span class="sep">·</span>VTS<span class="sep">·</span>INTERNACIONAL</div>
+  <h1 class="big">Infraestructura modular de<br><span class="thin">inteligencia empresarial.</span></h1>
+  <p class="tagline">Inteligencia que conecta. Tecnología que construye. Oportunidades que trascienden fronteras.</p>
+  <div class="metarow">
+    <span>FOUNDED · <b>Armando Omar Bermúdez Vila</b></span>
+    <span>DOC · <b>Presentación institucional v1.0</b></span>
+    <span>DATE · <b>Noviembre 2026</b></span>
+  </div>
+</header>
+
+<section id="somos">
+  <div class="mod"><span class="id">M-01</span><span>QUIÉNES SOMOS</span><span class="ln"></span></div>
+  <h2>Una iniciativa, no un eslogan.</h2>
+  <p class="lead">VERBUM TECH SOLUTION (VTS) es una iniciativa de desarrollo tecnológico y empresarial concebida para construir una infraestructura modular de inteligencia empresarial, análisis de información y asistencia a la toma de decisiones mediante inteligencia artificial.</p>
+  <p>Nuestra visión es conectar empresas, profesionales, mercados, organizaciones y oportunidades mediante herramientas que transformen información dispersa en conocimiento útil para la actividad empresarial.</p>
+  <p>VTS aspira a desarrollar una red internacional de operaciones nacionales conectadas a una infraestructura tecnológica común, respetando las particularidades jurídicas, económicas y comerciales de cada territorio.</p>
+</section>
+
+<section id="vision">
+  <div class="mod"><span class="id">M-02</span><span>NUESTRA VISIÓN</span><span class="ln"></span></div>
+  <h2>Ocho funciones, <em>una sola infraestructura.</em></h2>
+  <ul class="pillars">
+    <li>Conocimiento de los mercados</li>
+    <li>Identificación de oportunidades comerciales</li>
+    <li>Investigación empresarial y sectorial</li>
+    <li>Inteligencia competitiva</li>
+    <li>Gestión documental y contractual</li>
+    <li>Análisis de riesgos y obligaciones</li>
+    <li>Conexión entre empresas, proveedores y organizaciones</li>
+    <li>Toma de decisiones basada en evidencias</li>
+  </ul>
+  <p style="margin-top:26px">No pretendemos ser únicamente una empresa de software. Nuestra aspiración es desarrollar una infraestructura de inteligencia empresarial que evolucione junto con las necesidades de sus usuarios y mercados.</p>
+</section>
+
+<section id="lineas">
+  <div class="mod"><span class="id">M-03</span><span>LÍNEAS DE DESARROLLO</span><span class="ln"></span></div>
+  <h2>Cuatro líneas de trabajo.</h2>
+  <div class="grid2">
+    <div class="cell"><h4>A · Inteligencia empresarial y mercados</h4><p>Identificación de empresas y sectores, investigación de mercados nacionales e internacionales, detección de oportunidades, análisis de competidores y proveedores, informes estratégicos.</p></div>
+    <div class="cell"><h4>B · Compras públicas y gestión contractual</h4><p>Localización de licitaciones, análisis de pliegos, investigación de organismos contratantes, evaluación documental de proveedores, alertas de vencimientos y riesgos administrativos.</p></div>
+    <div class="cell"><h4>C · Inteligencia jurídica y cumplimiento</h4><p>Consulta de legislación, identificación de obligaciones, clasificación de fuentes oficiales, trazabilidad documental y seguimiento de cambios normativos. Apoyo informativo; no sustituye el asesoramiento jurídico profesional.</p></div>
+    <div class="cell"><h4>D · Automatización e inteligencia artificial</h4><p>Procesamiento documental, clasificación de información, investigación asistida, generación de informes y asistencia empresarial, con integración progresiva de servicios y fuentes externas.</p></div>
+  </div>
+</section>
+
+<section id="infra">
+  <div class="mod"><span class="id">M-04</span><span>INFRAESTRUCTURA TECNOLÓGICA</span><span class="ln"></span></div>
+  <h2>Los módulos, <em>con su estado real.</em></h2>
+  <div class="modline"><span class="code">NX-01</span><h3>VERBUM NEXUS</h3><span class="chip dev">EN DESARROLLO</span><div class="desc">Infraestructura de integración y coordinación de módulos, usuarios, permisos y servicios.</div></div>
+  <div class="modline"><span class="code">LX-01</span><h3>LEX CORE</h3><span class="chip dev">EN DESARROLLO</span><div class="desc">Línea especializada en inteligencia jurídica, organización de fuentes y trazabilidad documental.</div></div>
+  <div class="modline"><span class="code">MU-01</span><h3>MUTUAL VTS</h3><span class="chip demo">DEMO-CONCEPTO</span><div class="desc">Línea de investigación de ecosistemas empresariales, organizaciones, sectores, proveedores y oportunidades.</div></div>
+  <div class="modline"><span class="code">IN-01</span><h3>VTS INTELLIGENCE</h3><span class="chip demo">DEMO-CONCEPTO</span><div class="desc">Concepto de integración de capacidades de investigación, análisis y asistencia a decisiones empresariales.</div></div>
+  <p class="note" style="margin-top:18px">Estos componentes no deben interpretarse como productos comerciales terminados ni como servicios públicos disponibles. Su grado de desarrollo y validación es diferente.</p>
+</section>
+
+<section id="estado">
+  <div class="mod"><span class="id">M-05</span><span>ESTADO REAL DEL PROYECTO</span><span class="ln"></span></div>
+  <h2>Transparencia sobre la madurez.</h2>
+  <p>VTS mantiene una política de transparencia sobre el grado de madurez de sus desarrollos. Existen desarrollos internos y prototipos demostrativos, incluyendo líneas de trabajo en VERBUM NEXUS y LEX CORE. No presentamos la infraestructura completa como una plataforma comercial plenamente operativa: las integraciones externas, fuentes de datos, conectores, servicios de IA y funcionalidades de producción requieren validación individual.</p>
+  <table class="states">
+    <tr><td>DEMO-CONCEPTO</td><td>Idea o demostración conceptual</td></tr>
+    <tr><td>EN DESARROLLO</td><td>Construcción tecnológica</td></tr>
+    <tr><td>EN PRUEBAS</td><td>Pruebas funcionales</td></tr>
+    <tr><td>BETA</td><td>Versión experimental para usuarios autorizados</td></tr>
+    <tr><td>OPERATIVA</td><td>Servicio en funcionamiento</td></tr>
+    <tr><td>VALIDADA</td><td>Funcionamiento contrastado mediante evidencias</td></tr>
+  </table>
+  <p class="note" style="margin-top:20px">Principio institucional: ninguna funcionalidad se declara operativa sin pruebas y evidencias suficientes.</p>
+</section>
+
+<section id="internacional">
+  <div class="mod"><span class="id">M-06</span><span>MODELO INTERNACIONAL</span><span class="ln"></span></div>
+  <h2>Operaciones nacionales, <em>una sola columna vertebral.</em></h2>
+  <p>Cada operación nacional podría desarrollar investigación de su mercado, identificación de clientes y necesidades, relaciones empresariales, alianzas locales, validación de soluciones tecnológicas, desarrollo comercial y adaptación de productos al entorno nacional.</p>
+  <p>Las operaciones nacionales compartirían identidad, metodología y orientación tecnológica comunes, manteniendo en consideración sus particularidades jurídicas y empresariales.</p>
+</section>
+
+<section id="cofundacion">
+  <div class="mod"><span class="id">M-07</span><span>PROPUESTA DE COFUNDACIÓN</span><span class="ln"></span></div>
+  <h2>Buscamos constructores, <em>no representantes.</em></h2>
+  <p>Buscamos personas con capacidad para participar en la construcción de operaciones nacionales de VTS, capaces de desarrollar una unidad de negocio con perspectiva de continuidad.</p>
+  <div class="cols3">
+    <div class="cell"><h4>Perfil que nos interesa</h4><ul>
+      <li>Experiencia empresarial demostrable</li>
+      <li>Conocimiento profundo de su mercado</li>
+      <li>Capacidad de gestión y organización</li>
+      <li>Relaciones comerciales e institucionales legítimas</li>
+      <li>Experiencia en desarrollo de negocios</li>
+      <li>Disposición para integrarse en proyectos tecnológicos</li>
+      <li>Compromiso con objetivos verificables</li>
+    </ul></div>
+    <div class="cell"><h4>Qué aporta VTS</h4><ul>
+      <li>Identidad y estrategia internacional</li>
+      <li>Concepto y metodología empresarial</li>
+      <li>Arquitectura de soluciones en desarrollo</li>
+      <li>Líneas de productos y proyectos</li>
+      <li>Coordinación de la red internacional</li>
+      <li>Desarrollo conjunto de oportunidades</li>
+    </ul></div>
+    <div class="cell"><h4>Qué esperamos del socio</h4><ul>
+      <li>Conocimiento del territorio</li>
+      <li>Investigación del mercado local</li>
+      <li>Desarrollo de oportunidades</li>
+      <li>Identificación de clientes y aliados</li>
+      <li>Capacidad operativa</li>
+      <li>Participación en la dirección nacional</li>
+    </ul></div>
+  </div>
+  <p style="margin-top:26px"><b>Participación económica.</b> La participación societaria, distribución de beneficios, aportaciones, responsabilidades y derechos de decisión se negociarán individualmente. No existe un porcentaje automático ni una oferta societaria universal. Cualquier incorporación estará sujeta a evaluación, acuerdo formal y cumplimiento de la legislación aplicable.</p>
+</section>
+
+<section id="colaboracion">
+  <div class="mod"><span class="id">M-08</span><span>OPORTUNIDADES DE COLABORACIÓN</span><span class="ln"></span></div>
+  <h2>Siete formas de entrar.</h2>
+  <ol class="steps">
+    <li>Cofundación de una operación nacional</li>
+    <li>Alianza tecnológica</li>
+    <li>Desarrollo conjunto de productos</li>
+    <li>Investigación de mercados</li>
+    <li>Alianza comercial B2B</li>
+    <li>Integración de servicios profesionales</li>
+    <li>Cooperación con instituciones y organizaciones</li>
+  </ol>
+  <p style="margin-top:22px" class="note">La modalidad dependerá de la experiencia, capacidades y objetivos de cada interesado.</p>
+</section>
+
+<section id="gobierno">
+  <div class="mod"><span class="id">M-09</span><span>GOBIERNO Y GARANTÍAS</span><span class="ln"></span></div>
+  <h2>Reglas antes que promesas.</h2>
+  <ul class="pillars">
+    <li>Protección de la propiedad intelectual</li>
+    <li>Confidencialidad</li>
+    <li>Protección de datos</li>
+    <li>Trazabilidad de las decisiones</li>
+    <li>Claridad sobre responsabilidades</li>
+    <li>Separación de activos y recursos</li>
+    <li>Acuerdos transparentes</li>
+    <li>Cumplimiento de la legislación de cada país</li>
+  </ul>
+  <p style="margin-top:26px">La propiedad de la marca, el software preexistente, las aportaciones de los socios y los desarrollos conjuntos quedarán identificados contractualmente.</p>
+</section>
+
+<section id="etapa">
+  <div class="mod"><span class="id">M-10</span><span>PRÓXIMA ETAPA</span><span class="ln"></span></div>
+  <h2>Empezamos con una conversación.</h2>
+  <ol class="steps">
+    <li>Presentación de las partes</li>
+    <li>Intercambio de información profesional</li>
+    <li>Evaluación del mercado nacional</li>
+    <li>Identificación de oportunidades concretas</li>
+    <li>Definición de la unidad de negocio</li>
+    <li>Evaluación de aportaciones y responsabilidades</li>
+    <li>Negociación y formalización de acuerdos</li>
+    <li>Desarrollo de un plan operativo</li>
+  </ol>
+</section>
+
+<section id="contacto">
+  <div class="mod"><span class="id">M-11</span><span>INFORMACIÓN CORPORATIVA Y CONTACTO</span><span class="ln"></span></div>
+  <h2>Contacto.</h2>
+  <p><b>Fundador e impulsor:</b> Armando Omar Bermúdez Vila</p>
+  <p><b>Sitio web institucional:</b> este documento, publicado en la dirección que figura en su navegador.</p>
+  <p><b>Correo corporativo:</b> pendiente de confirmar.</p>
+  <p><b>Entidad jurídica y datos registrales:</b> pendientes de acreditación.</p>
+  <p><b>LinkedIn:</b> pendiente de incorporar enlace oficial.</p>
+  <p><b>Demostración:</b> disponible únicamente cuando exista una versión concreta, accesible y verificada.</p>
+</section>
+
+<div class="footer">
+  <p class="decl">"El verdadero valor de la inteligencia artificial no reside únicamente en la tecnología, sino en su capacidad para conectar conocimiento, personas, organizaciones y oportunidades."</p>
+  <p class="legal">VERBUM TECH SOLUTION no pretende construir una red internacional de representantes que trabajen de forma aislada. Su visión es desarrollar una infraestructura común sobre la cual puedan crecer operaciones nacionales, con conocimiento local, capacidades complementarias y objetivos empresariales compartidos. Este documento es institucional y de presentación: no constituye oferta de inversión, contrato societario, garantía de resultados ni acreditación de actividad empresarial regulada.</p>
+  <div class="signoff">VERBUM TECH SOLUTION · <b>VTS</b> · INTELIGENCIA QUE CONECTA</div>
+</div>
+
+</div>
+
+<!-- ══════════════ FRANÇAIS ══════════════ -->
+<div class="lang" id="lang-fr">
+
+<header class="hero">
+  <div class="kicker">VERBUM TECH SOLUTION<span class="sep">·</span>VTS<span class="sep">·</span>INTERNATIONAL</div>
+  <h1 class="big">Infrastructure modulaire<br><span class="thin">d'intelligence d'entreprise.</span></h1>
+  <p class="tagline">L'intelligence qui connecte. La technologie qui construit. Des opportunités qui transcendent les frontières.</p>
+  <div class="metarow">
+    <span>FOUNDEUR · <b>Armando Omar Bermúdez Vila</b></span>
+    <span>DOC · <b>Présentation institutionnelle v1.0</b></span>
+    <span>DATE · <b>Novembre 2026</b></span>
+  </div>
+</header>
+
+<section id="somos-fr">
+  <div class="mod"><span class="id">M-01</span><span>QUI NOUS SOMMES</span><span class="ln"></span></div>
+  <h2>Une initiative, pas un slogan.</h2>
+  <p class="lead">VERBUM TECH SOLUTION (VTS) est une initiative de développement technologique et entrepreneurial conçue pour bâtir une infrastructure modulaire d'intelligence d'entreprise, d'analyse de l'information et d'aide à la décision par l'intelligence artificielle.</p>
+  <p>Notre vision est de connecter entreprises, professionnels, marchés, organisations et opportunités grâce à des outils qui transforment l'information dispersée en connaissance utile à l'activité économique.</p>
+  <p>VTS ambitionne de développer un réseau international d'opérations nationales connectées à une infrastructure technologique commune, dans le respect des particularités juridiques, économiques et commerciales de chaque territoire.</p>
+</section>
+
+<section id="vision-fr">
+  <div class="mod"><span class="id">M-02</span><span>NOTRE VISION</span><span class="ln"></span></div>
+  <h2>Huit fonctions, <em>une seule infrastructure.</em></h2>
+  <ul class="pillars">
+    <li>La connaissance des marchés</li>
+    <li>L'identification d'opportunités commerciales</li>
+    <li>La recherche d'entreprise et sectorielle</li>
+    <li>L'intelligence concurrentielle</li>
+    <li>La gestion documentaire et contractuelle</li>
+    <li>L'analyse des risques et obligations</li>
+    <li>La connexion entre entreprises, fournisseurs et organisations</li>
+    <li>La décision fondée sur des preuves</li>
+  </ul>
+  <p style="margin-top:26px">Nous ne prétendons pas être une simple société de logiciels. Notre aspiration est de bâtir une infrastructure d'intelligence d'entreprise capable d'évoluer avec les besoins de ses utilisateurs et de ses marchés.</p>
+</section>
+
+<section id="lineas-fr">
+  <div class="mod"><span class="id">M-03</span><span>AXES DE DÉVELOPPEMENT</span><span class="ln"></span></div>
+  <h2>Quatre axes de travail.</h2>
+  <div class="grid2">
+    <div class="cell"><h4>A · Intelligence d'entreprise et marchés</h4><p>Identification d'entreprises et de secteurs, recherche de marchés nationaux et internationaux, détection d'opportunités, analyse de concurrents et de fournisseurs, rapports stratégiques.</p></div>
+    <div class="cell"><h4>B · Marchés publics et gestion contractuelle</h4><p>Localisation d'appels d'offres, analyse des cahiers des charges, recherche des organismes contractants, évaluation documentaire des fournisseurs, alertes d'échéances et de risques administratifs.</p></div>
+    <div class="cell"><h4>C · Intelligence juridique et conformité</h4><p>Consultation de la législation, identification des obligations, classification des sources officielles, traçabilité documentaire et suivi des évolutions normatives. Outil d'information ; ne remplace pas le conseil juridique professionnel.</p></div>
+    <div class="cell"><h4>D · Automatisation et intelligence artificielle</h4><p>Traitement documentaire, classification de l'information, recherche assistée, génération de rapports et assistance aux entreprises, avec intégration progressive de services et de sources externes.</p></div>
+  </div>
+</section>
+
+<section id="infra-fr">
+  <div class="mod"><span class="id">M-04</span><span>INFRASTRUCTURE TECHNOLOGIQUE</span><span class="ln"></span></div>
+  <h2>Les modules, <em>avec leur état réel.</em></h2>
+  <div class="modline"><span class="code">NX-01</span><h3>VERBUM NEXUS</h3><span class="chip dev">EN DÉVELOPPEMENT</span><div class="desc">Infrastructure d'intégration et de coordination des modules, utilisateurs, permissions et services.</div></div>
+  <div class="modline"><span class="code">LX-01</span><h3>LEX CORE</h3><span class="chip dev">EN DÉVELOPPEMENT</span><div class="desc">Axe spécialisé dans l'intelligence juridique, l'organisation des sources et la traçabilité documentaire.</div></div>
+  <div class="modline"><span class="code">MU-01</span><h3>MUTUAL VTS</h3><span class="chip demo">DÉMO-CONCEPT</span><div class="desc">Axe de recherche sur les écosystèmes d'entreprises, organisations, secteurs, fournisseurs et opportunités.</div></div>
+  <div class="modline"><span class="code">IN-01</span><h3>VTS INTELLIGENCE</h3><span class="chip demo">DÉMO-CONCEPT</span><div class="desc">Concept d'intégration des capacités de recherche, d'analyse et d'assistance à la décision d'entreprise.</div></div>
+  <p class="note" style="margin-top:18px">Ces composants ne doivent pas être interprétés comme des produits commerciaux achevés ni comme des services publics disponibles. Leur degré de développement et de validation diffère.</p>
+</section>
+
+<section id="estado-fr">
+  <div class="mod"><span class="id">M-05</span><span>ÉTAT RÉEL DU PROJET</span><span class="ln"></span></div>
+  <h2>Transparence sur la maturité.</h2>
+  <p>VTS maintient une politique de transparence sur le degré de maturité de ses développements. Il existe des développements internes et des prototypes démonstratifs, incluant des axes de travail sur VERBUM NEXUS et LEX CORE. Nous ne présentons pas l'infrastructure complète comme une plateforme commerciale pleinement opérationnelle : les intégrations externes, sources de données, connecteurs, services d'IA et fonctionnalités de production exigent une validation individuelle.</p>
+  <table class="states">
+    <tr><td>DÉMO-CONCEPT</td><td>Idée ou démonstration conceptuelle</td></tr>
+    <tr><td>EN DÉVELOPPEMENT</td><td>Construction technologique</td></tr>
+    <tr><td>EN TESTS</td><td>Tests fonctionnels</td></tr>
+    <tr><td>BETA</td><td>Version expérimentale pour utilisateurs autorisés</td></tr>
+    <tr><td>OPÉRATIONNELLE</td><td>Service en fonctionnement</td></tr>
+    <tr><td>VALIDÉE</td><td>Fonctionnement vérifié par des preuves</td></tr>
+  </table>
+  <p class="note" style="margin-top:20px">Principe institutionnel : aucune fonctionnalité n'est déclarée opérationnelle sans tests et preuves suffisants.</p>
+</section>
+
+<section id="internacional-fr">
+  <div class="mod"><span class="id">M-06</span><span>MODÈLE INTERNATIONAL</span><span class="ln"></span></div>
+  <h2>Opérations nationales, <em>une seule colonne vertébrale.</em></h2>
+  <p>Chaque opération nationale pourrait développer la recherche sur son marché, l'identification de clients et de besoins, les relations d'affaires, les alliances locales, la validation de solutions technologiques, le développement commercial et l'adaptation des produits à l'environnement national.</p>
+  <p>Les opérations nationales partageraient une identité, une méthodologie et une orientation technologique communes, en tenant compte de leurs particularités juridiques et commerciales.</p>
+</section>
+
+<section id="cofundacion-fr">
+  <div class="mod"><span class="id">M-07</span><span>PROPOSITION DE COFONDATION</span><span class="ln"></span></div>
+  <h2>Nous cherchons des bâtisseurs, <em>pas des représentants.</em></h2>
+  <p>Nous cherchons des personnes capables de participer à la construction d'opérations nationales de VTS, et de développer une unité d'affaires avec une perspective de continuité.</p>
+  <div class="cols3">
+    <div class="cell"><h4>Profil recherché</h4><ul>
+      <li>Expérience d'entreprise démontrable</li>
+      <li>Connaissance approfondie de son marché</li>
+      <li>Capacité de gestion et d'organisation</li>
+      <li>Relations commerciales et institutionnelles légitimes</li>
+      <li>Expérience en développement d'affaires</li>
+      <li>Disposition à s'intégrer à des projets technologiques</li>
+      <li>Engagement sur des objectifs vérifiables</li>
+    </ul></div>
+    <div class="cell"><h4>Ce qu'apporte VTS</h4><ul>
+      <li>Identité et stratégie internationales</li>
+      <li>Concept et méthodologie d'entreprise</li>
+      <li>Architecture de solutions en développement</li>
+      <li>Gammes de produits et projets</li>
+      <li>Coordination du réseau international</li>
+      <li>Développement conjoint d'opportunités</li>
+    </ul></div>
+    <div class="cell"><h4>Ce que nous attendons du partenaire</h4><ul>
+      <li>Connaissance du territoire</li>
+      <li>Recherche du marché local</li>
+      <li>Développement d'opportunités</li>
+      <li>Identification de clients et d'alliés</li>
+      <li>Capacité opérationnelle</li>
+      <li>Participation à la direction nationale</li>
+    </ul></div>
+  </div>
+  <p style="margin-top:26px"><b>Participation économique.</b> La participation sociétaire, la distribution des bénéfices, les apports, responsabilités et droits de décision se négocieront individuellement. Il n'existe ni pourcentage automatique ni offre sociétaire universelle. Toute intégration sera soumise à évaluation, accord formel et respect de la législation applicable.</p>
+</section>
+
+<section id="colaboracion-fr">
+  <div class="mod"><span class="id">M-08</span><span>OPPORTUNITÉS DE COLLABORATION</span><span class="ln"></span></div>
+  <h2>Sept façons d'entrer.</h2>
+  <ol class="steps">
+    <li>Cofondation d'une opération nationale</li>
+    <li>Alliance technologique</li>
+    <li>Développement conjoint de produits</li>
+    <li>Recherche de marchés</li>
+    <li>Alliance commerciale B2B</li>
+    <li>Intégration de services professionnels</li>
+    <li>Coopération avec institutions et organisations</li>
+  </ol>
+  <p style="margin-top:22px" class="note">La modalité dépendra de l'expérience, des capacités et des objectifs de chaque intéressé.</p>
+</section>
+
+<section id="gobierno-fr">
+  <div class="mod"><span class="id">M-09</span><span>GOUVERNANCE ET GARANTIES</span><span class="ln"></span></div>
+  <h2>Des règles avant des promesses.</h2>
+  <ul class="pillars">
+    <li>Protection de la propriété intellectuelle</li>
+    <li>Confidentialité</li>
+    <li>Protection des données</li>
+    <li>Traçabilité des décisions</li>
+    <li>Clarté sur les responsabilités</li>
+    <li>Séparation des actifs et des ressources</li>
+    <li>Accords transparents</li>
+    <li>Respect de la législation de chaque pays</li>
+  </ul>
+  <p style="margin-top:26px">La propriété de la marque, du logiciel préexistant, des apports des associés et des développements conjoints sera identifiée contractuellement.</p>
+</section>
+
+<section id="etapa-fr">
+  <div class="mod"><span class="id">M-10</span><span>PROCHAINE ÉTAPE</span><span class="ln"></span></div>
+  <h2>Commençons par une conversation.</h2>
+  <ol class="steps">
+    <li>Présentation des parties</li>
+    <li>Échange d'informations professionnelles</li>
+    <li>Évaluation du marché national</li>
+    <li>Identification d'opportunités concrètes</li>
+    <li>Définition de l'unité d'affaires</li>
+    <li>Évaluation des apports et responsabilités</li>
+    <li>Négociation et formalisation des accords</li>
+    <li>Développement d'un plan opérationnel</li>
+  </ol>
+</section>
+
+<section id="contacto-fr">
+  <div class="mod"><span class="id">M-11</span><span>INFORMATIONS SOCIÉTAIRES ET CONTACT</span><span class="ln"></span></div>
+  <h2>Contact.</h2>
+  <p><b>Fondateur et porteur du projet :</b> Armando Omar Bermúdez Vila</p>
+  <p><b>Site institutionnel :</b> le présent document, publié à l'adresse affichée dans votre navigateur.</p>
+  <p><b>Courriel corporatif :</b> à confirmer.</p>
+  <p><b>Entité juridique et données d'immatriculation :</b> en cours d'accréditation.</p>
+  <p><b>LinkedIn :</b> lien officiel à intégrer.</p>
+  <p><b>Démonstration :</b> disponible uniquement lorsqu'il existera une version concrète, accessible et vérifiée.</p>
+</section>
+
+<div class="footer">
+  <p class="decl">« La vraie valeur de l'intelligence artificielle ne réside pas seulement dans la technologie, mais dans sa capacité à connecter connaissances, personnes, organisations et opportunités. »</p>
+  <p class="legal">VERBUM TECH SOLUTION ne vise pas à constituer un réseau international de représentants travaillant de manière isolée. Sa vision est de développer une infrastructure commune sur laquelle puissent croître des opérations nationales, avec une connaissance locale, des capacités complémentaires et des objectifs d'entreprise partagés. Ce document est institutionnel et de présentation : il ne constitue ni une offre d'investissement, ni un contrat de société, ni une garantie de résultats, ni une accréditation d'activité d'entreprise réglementée.</p>
+  <div class="signoff">VERBUM TECH SOLUTION · <b>VTS</b> · L'INTELLIGENCE QUI CONNECTE</div>
+</div>
+
+</div>
+
+<!-- ══════════════ ENGLISH ══════════════ -->
+<div class="lang" id="lang-en">
+
+<header class="hero">
+  <div class="kicker">VERBUM TECH SOLUTION<span class="sep">·</span>VTS<span class="sep">·</span>INTERNATIONAL</div>
+  <h1 class="big">Modular infrastructure for<br><span class="thin">business intelligence.</span></h1>
+  <p class="tagline">Intelligence that connects. Technology that builds. Opportunities that cross borders.</p>
+  <div class="metarow">
+    <span>FOUNDER · <b>Armando Omar Bermúdez Vila</b></span>
+    <span>DOC · <b>Institutional presentation v1.0</b></span>
+    <span>DATE · <b>November 2026</b></span>
+  </div>
+</header>
+
+<section id="somos-en">
+  <div class="mod"><span class="id">M-01</span><span>WHO WE ARE</span><span class="ln"></span></div>
+  <h2>An initiative, not a slogan.</h2>
+  <p class="lead">VERBUM TECH SOLUTION (VTS) is a technology and business development initiative created to build a modular infrastructure for business intelligence, information analysis and AI-assisted decision-making.</p>
+  <p>Our vision is to connect companies, professionals, markets, organizations and opportunities through tools that turn scattered information into knowledge useful for business activity.</p>
+  <p>VTS aims to develop an international network of national operations connected to a common technology infrastructure, respecting the legal, economic and commercial particularities of each territory.</p>
+</section>
+
+<section id="vision-en">
+  <div class="mod"><span class="id">M-02</span><span>OUR VISION</span><span class="ln"></span></div>
+  <h2>Eight functions, <em>one infrastructure.</em></h2>
+  <ul class="pillars">
+    <li>Market knowledge</li>
+    <li>Identification of commercial opportunities</li>
+    <li>Business and sector research</li>
+    <li>Competitive intelligence</li>
+    <li>Document and contract management</li>
+    <li>Risk and obligation analysis</li>
+    <li>Connection between companies, suppliers and organizations</li>
+    <li>Evidence-based decision-making</li>
+  </ul>
+  <p style="margin-top:26px">We do not aim to be just a software company. Our aspiration is to build a business intelligence infrastructure that evolves with the needs of its users and markets.</p>
+</section>
+
+<section id="lineas-en">
+  <div class="mod"><span class="id">M-03</span><span>DEVELOPMENT LINES</span><span class="ln"></span></div>
+  <h2>Four lines of work.</h2>
+  <div class="grid2">
+    <div class="cell"><h4>A · Business and market intelligence</h4><p>Identification of companies and sectors, national and international market research, opportunity detection, competitor and supplier analysis, strategic reporting.</p></div>
+    <div class="cell"><h4>B · Public procurement and contract management</h4><p>Locating tenders and calls, analyzing requirements and specifications, researching contracting bodies, document-based supplier evaluation, deadline alerts and administrative risk identification.</p></div>
+    <div class="cell"><h4>C · Legal intelligence and compliance</h4><p>Legislation lookup, identification of business obligations, classification of official sources, document traceability and regulatory change tracking. Information support only; it does not replace professional legal advice.</p></div>
+    <div class="cell"><h4>D · Automation and artificial intelligence</h4><p>Document processing, information classification, assisted research, report generation and business assistance, with progressive integration of external services and sources.</p></div>
+  </div>
+</section>
+
+<section id="infra-en">
+  <div class="mod"><span class="id">M-04</span><span>TECHNOLOGY INFRASTRUCTURE</span><span class="ln"></span></div>
+  <h2>The modules, <em>with their real status.</em></h2>
+  <div class="modline"><span class="code">NX-01</span><h3>VERBUM NEXUS</h3><span class="chip dev">IN DEVELOPMENT</span><div class="desc">Infrastructure for the integration and coordination of modules, users, permissions and services.</div></div>
+  <div class="modline"><span class="code">LX-01</span><h3>LEX CORE</h3><span class="chip dev">IN DEVELOPMENT</span><div class="desc">Line specialized in legal intelligence, source organization and document traceability.</div></div>
+  <div class="modline"><span class="code">MU-01</span><h3>MUTUAL VTS</h3><span class="chip demo">DEMO-CONCEPT</span><div class="desc">Research line on business ecosystems, organizations, sectors, suppliers and opportunities.</div></div>
+  <div class="modline"><span class="code">IN-01</span><h3>VTS INTELLIGENCE</h3><span class="chip demo">DEMO-CONCEPT</span><div class="desc">Concept for integrating research, analysis and business decision-support capabilities.</div></div>
+  <p class="note" style="margin-top:18px">These components must not be interpreted as finished commercial products or publicly available services. Their degree of development and validation differs.</p>
+</section>
+
+<section id="estado-en">
+  <div class="mod"><span class="id">M-05</span><span>REAL PROJECT STATUS</span><span class="ln"></span></div>
+  <h2>Transparency about maturity.</h2>
+  <p>VTS maintains a transparency policy on the maturity level of its developments. Internal developments and demonstrative prototypes exist, including work lines on VERBUM NEXUS and LEX CORE. We do not present the full infrastructure as a fully operating commercial platform: external integrations, data sources, connectors, AI services and production features require individual validation.</p>
+  <table class="states">
+    <tr><td>DEMO-CONCEPT</td><td>Idea or conceptual demonstration</td></tr>
+    <tr><td>IN DEVELOPMENT</td><td>Technology being built</td></tr>
+    <tr><td>IN TESTING</td><td>Functional testing</td></tr>
+    <tr><td>BETA</td><td>Experimental version for authorized users</td></tr>
+    <tr><td>OPERATIONAL</td><td>Service in operation</td></tr>
+    <tr><td>VALIDATED</td><td>Operation verified through evidence</td></tr>
+  </table>
+  <p class="note" style="margin-top:20px">Institutional principle: no functionality is declared operational without sufficient testing and evidence.</p>
+</section>
+
+<section id="internacional-en">
+  <div class="mod"><span class="id">M-06</span><span>INTERNATIONAL MODEL</span><span class="ln"></span></div>
+  <h2>National operations, <em>one backbone.</em></h2>
+  <p>Each national operation could develop research on its market, identification of clients and needs, business relationships, local alliances, validation of technology solutions, commercial development and adaptation of products to the national environment.</p>
+  <p>National operations would share a common identity, methodology and technology orientation, while keeping in consideration their legal and business particularities.</p>
+</section>
+
+<section id="cofundacion-en">
+  <div class="mod"><span class="id">M-07</span><span>CO-FOUNDING PROPOSAL</span><span class="ln"></span></div>
+  <h2>We seek builders, <em>not representatives.</em></h2>
+  <p>We seek people able to take part in building VTS national operations, and to develop a business unit with a continuity perspective.</p>
+  <div class="cols3">
+    <div class="cell"><h4>Profile we are interested in</h4><ul>
+      <li>Demonstrable business experience</li>
+      <li>Deep knowledge of their market</li>
+      <li>Management and organization skills</li>
+      <li>Legitimate commercial and institutional relationships</li>
+      <li>Experience in business development</li>
+      <li>Willingness to join technology projects</li>
+      <li>Commitment to verifiable objectives</li>
+    </ul></div>
+    <div class="cell"><h4>What VTS brings</h4><ul>
+      <li>International identity and strategy</li>
+      <li>Business concept and methodology</li>
+      <li>Architecture of solutions in development</li>
+      <li>Product and project lines</li>
+      <li>Coordination of the international network</li>
+      <li>Joint development of opportunities</li>
+    </ul></div>
+    <div class="cell"><h4>What we expect from the partner</h4><ul>
+      <li>Knowledge of the territory</li>
+      <li>Local market research</li>
+      <li>Development of opportunities</li>
+      <li>Identification of clients and allies</li>
+      <li>Operational capacity</li>
+      <li>Participation in national management</li>
+    </ul></div>
+  </div>
+  <p style="margin-top:26px"><b>Economic participation.</b> Equity participation, profit distribution, contributions, responsibilities and decision rights will be negotiated individually. There is no automatic percentage or universal equity offer. Any integration will be subject to evaluation, formal agreement and compliance with applicable law.</p>
+</section>
+
+<section id="colaboracion-en">
+  <div class="mod"><span class="id">M-08</span><span>COLLABORATION OPPORTUNITIES</span><span class="ln"></span></div>
+  <h2>Seven ways in.</h2>
+  <ol class="steps">
+    <li>Co-founding a national operation</li>
+    <li>Technology alliance</li>
+    <li>Joint product development</li>
+    <li>Market research</li>
+    <li>B2B commercial alliance</li>
+    <li>Integration of professional services</li>
+    <li>Cooperation with institutions and organizations</li>
+  </ol>
+  <p style="margin-top:22px" class="note">The modality will depend on the experience, capabilities and objectives of each interested party.</p>
+</section>
+
+<section id="gobierno-en">
+  <div class="mod"><span class="id">M-09</span><span>GOVERNANCE AND GUARANTEES</span><span class="ln"></span></div>
+  <h2>Rules before promises.</h2>
+  <ul class="pillars">
+    <li>Intellectual property protection</li>
+    <li>Confidentiality</li>
+    <li>Data protection</li>
+    <li>Traceability of decisions</li>
+    <li>Clarity on responsibilities</li>
+    <li>Separation of assets and resources</li>
+    <li>Transparent agreements</li>
+    <li>Compliance with each country's law</li>
+  </ul>
+  <p style="margin-top:26px">Ownership of the brand, pre-existing software, partner contributions and joint developments will be identified contractually.</p>
+</section>
+
+<section id="etapa-en">
+  <div class="mod"><span class="id">M-10</span><span>NEXT STAGE</span><span class="ln"></span></div>
+  <h2>We start with a conversation.</h2>
+  <ol class="steps">
+    <li>Presentation of the parties</li>
+    <li>Exchange of professional information</li>
+    <li>Evaluation of the national market</li>
+    <li>Identification of concrete opportunities</li>
+    <li>Definition of the business unit</li>
+    <li>Evaluation of contributions and responsibilities</li>
+    <li>Negotiation and formalization of agreements</li>
+    <li>Development of an operating plan</li>
+  </ol>
+</section>
+
+<section id="contacto-en">
+  <div class="mod"><span class="id">M-11</span><span>CORPORATE INFORMATION AND CONTACT</span><span class="ln"></span></div>
+  <h2>Contact.</h2>
+  <p><b>Founder and driving force:</b> Armando Omar Bermúdez Vila</p>
+  <p><b>Institutional website:</b> this document, published at the address shown in your browser.</p>
+  <p><b>Corporate email:</b> to be confirmed.</p>
+  <p><b>Legal entity and registration data:</b> pending accreditation.</p>
+  <p><b>LinkedIn:</b> official link to be added.</p>
+  <p><b>Demonstration:</b> available only when a concrete, accessible and verified version exists.</p>
+</section>
+
+<div class="footer">
+  <p class="decl">"The true value of artificial intelligence lies not only in the technology, but in its ability to connect knowledge, people, organizations and opportunities."</p>
+  <p class="legal">VERBUM TECH SOLUTION does not intend to build an international network of representatives working in isolation. Its vision is to develop a common infrastructure on which national operations can grow, with local knowledge, complementary capabilities and shared business goals. This is an institutional presentation document: it constitutes neither an investment offer, nor a company contract, nor a guarantee of results, nor accreditation of regulated business activity.</p>
+  <div class="signoff">VERBUM TECH SOLUTION · <b>VTS</b> · INTELLIGENCE THAT CONNECTS</div>
+</div>
+
+</div>
+
+</main>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.langbar button');
+  function setLang(code){
+    document.querySelectorAll('.lang').forEach(function(b){b.classList.remove('on')});
+    var block=document.getElementById('lang-'+code);
+    if(block){block.classList.add('on');}
+    document.documentElement.lang=code;
+    btns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.lang===code?'true':'false')});
+    try{localStorage.setItem('vts-lang',code)}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.lang)})});
+  var saved=null;
+  try{saved=localStorage.getItem('vts-lang')}catch(e){}
+  if(saved&&document.getElementById('lang-'+saved)){setLang(saved)}
+})();
+</script>
+</body>
+</html>
