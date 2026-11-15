@@ -67,7 +67,7 @@ footer{text-align:center;font-size:11px;color:#6f7280;padding:16px 0 30px}
 <body>
 <div class="appbar">
 <div class="logo">VTS</div>
-<div><h1>VERBUM HUB CUBA V2.0<small>Territorio en tiempo real · offline-first · datos reales</small></h1></div>
+<div><h1>VERBUM HUB CUBA V2.2<small>Territorio en tiempo real · offline-first · datos reales</small></h1></div>
 <span class="conn off" id="conn">Sin conexión</span>
 </div>
 <nav id="nav"></nav>
@@ -255,8 +255,9 @@ function todayStr(){var d=new Date();return d.getFullYear()+"-"+String(d.getMont
 function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function genId(pre){return pre+"-"+Date.now().toString(36).toUpperCase()+"-"+Math.floor(Math.random()*1e6).toString(36).toUpperCase()}
 var LSKEY="vth2state";
-function dflt(){return {records:[],cobros:[],queue:[],config:{costoCUP:300,vigenciaDias:40,tarjetas:{transfermovil:"",enzona:"",banco:""},instrucciones:"Pague por Transfermóvil a la tarjeta indicada y registre aquí el código de operación de la transferencia. El administrador verifica el pago y el anuncio queda publicado con su vigencia."},telegram:{token:"",chatId:"",offset:0},geoCache:{}}}
+function dflt(){return {records:[],cobros:[],queue:[],config:{costoCUP:300,vigenciaDias:40,tarjetas:{transfermovil:"",enzona:"",banco:""},telegram:{token:"",chatId:""},instrucciones:"Pague por Transfermóvil a la tarjeta indicada y registre aquí el código de operación de la transferencia. El administrador verifica el pago y el anuncio queda publicado con su vigencia."},telegram:{offset:0},geoCache:{}}}
 var state=(function(){try{var s=JSON.parse(localStorage.getItem(LSKEY));if(!s||!s.records)return dflt();return s}catch(e){return dflt()}})();
+if(!state.config)state.config=dflt().config;if(!state.config.telegram)state.config.telegram={token:"",chatId:""};if(!state.config.tarjetas)state.config.tarjetas={transfermovil:"",enzona:"",banco:""};if(!state.telegram)state.telegram={offset:0};
 function save(){localStorage.setItem(LSKEY,JSON.stringify(state))}
 function sha256(txt){if(window.crypto&&crypto.subtle){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(txt)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return ("0"+x.toString(16)).slice(-2)}).join("")})}return Promise.resolve("(hash no disponible)")}
 function hashRec(r){return sha256(JSON.stringify({id:r.id,tipo:r.tipo,creado:r.creado,t:(r.titulo||"")+"|"+(r.texto||"")})).then(function(h){r.hash=h})}
@@ -388,7 +389,7 @@ var txt="📢 "+(r.titulo||"")+"\n"+(r.texto||"")+(r.municipio?"\n📍 "+r.munic
 if(navigator.onLine&&state.config.telegram.token){tgPost("sendMessage",{chat_id:chat,text:txt}).then(function(res){if(res&&res.ok){bit(r,"Publicado en el grupo de Telegram","PUBLICADO")}else{bit(r,"Telegram rechazó la publicación: "+((res&&res.description)||"error"),"BORRADOR")}save();renderAll()}).catch(function(){state.queue.push({chatId:chat,text:txt,ref:r.id,ts:nowStr()});bit(r,"Sin conexión: en cola de envío","BORRADOR");save();renderAll();toast("En cola: se enviará al reconectar")})}
 else{state.queue.push({chatId:chat,text:txt,ref:r.id,ts:nowStr()});bit(r,"Sin conexión: en cola de envío","BORRADOR");save();renderAll();toast("En cola: se enviará al reconectar")}}
 function cerrar(id){var r=buscar(id);if(!r)return;bit(r,"Registro cerrado","CERRADO");save();renderAll()}
-function renderAll(){renderInicio();renderIng();renderNeg();renderNec();renderLog();renderCobros();renderCore();renderTgEstado();renderCobroCfg()}
+function rs(f){try{f()}catch(e){try{console.warn("render",e)}catch(e2){}}}function renderAll(){rs(renderInicio);rs(renderIng);rs(renderNeg);rs(renderNec);rs(renderLog);rs(renderCobros);rs(renderCore);rs(renderTgEstado);rs(renderCobroCfg)}
 function estadoPill(e){return '<span class="pill P'+String(e||"").replace(/ /g,"")+'">'+esc(e)+"</span>"}
 function bitHTML(r){var n=(r.bitacora||[]).length;return n?('<div class="hash">Bitácora: '+n+" entradas · ID "+esc(r.id)+(r.hash?" · SHA-256 "+esc(r.hash.slice(0,16))+"…":"")+"</div>"):('<div class="hash">ID '+esc(r.id)+"</div>")}
 function renderInicio(){var c={negocio:0,necesidad:0,logistica:0};state.records.forEach(function(r){if(c[r.tipo]!=null)c[r.tipo]++});
@@ -453,7 +454,7 @@ function show(sec){var bs=document.querySelectorAll("nav button");for(var i=0;i<
 var toastTimer=null;
 function toast(t){var d=el("toast");if(!d){d=document.createElement("div");d.id="toast";d.style.cssText="position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:#202124;color:#fff;padding:9px 16px;border-radius:20px;font-size:13px;z-index:99;max-width:90vw";document.body.appendChild(d)}d.textContent=t;d.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(function(){d.style.display="none"},3500)}
 function updateConn(){var on=navigator.onLine;var d=el("conn");if(d){d.textContent=on?"En línea":"Sin conexión";d.className="conn "+(on?"on":"off")}if(on)flushQueue()}
-function init(){try{buildNav();openIDB().then(function(){fillProv("mprov");fillProv("cprov");fillMuniSel("mmuni","La Habana");fillMuniSel("cmuni","La Habana");fillMuniSel("nMuni","La Habana");fillMuniSel("neMuni","La Habana");el("nProv").value="La Habana";el("neProv").value="La Habana";bindMap();updateConn();show("inicio");renderAll();
+function init(){try{buildNav();openIDB().then(function(){fillProv("mprov");fillProv("cprov");fillMuniSel("mmuni","La Habana");fillMuniSel("cmuni","La Habana");fillMuniSel("nMuni","La Habana");fillMuniSel("neMuni","La Habana");el("nProv").value="La Habana";el("neProv").value="La Habana";bindMap();updateConn();show("inicio");try{renderAll()}catch(e){try{console.warn(e)}catch(e2){}}
 el("cfgToken").value=state.config.telegram.token||"";el("cfgChat").value=state.config.telegram.chatId||"";el("cfgCosto").value=state.config.costoCUP;el("cfgVig").value=state.config.vigenciaDias;el("cfgTM").value=state.config.tarjetas.transfermovil||"";el("cfgEZ").value=state.config.tarjetas.enzona||"";el("cfgBanco").value=state.config.tarjetas.banco||"";el("cfgInstr").value=state.config.instrucciones||"";
 window.addEventListener("online",updateConn);window.addEventListener("offline",updateConn);setInterval(function(){autoSync();updateConn()},120000)})}catch(e){var t=document.createElement("div");t.style.cssText="position:fixed;top:0;left:0;right:0;background:#d93025;color:#fff;padding:8px;z-index:999;font-size:12px";t.textContent="Error al iniciar: "+(e&&e.message||e);document.body.appendChild(t)}}
 if("serviceWorker" in navigator&&location.protocol==="https:"){try{navigator.serviceWorker.register("verbum-hub-v2.sw.js")}catch(e){}}
