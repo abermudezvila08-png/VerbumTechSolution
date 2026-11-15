@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VERBUM HUB CUBA V2.1</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0b0b10;color:#f2f2f5;font-size:15px}
+.appbar{background:#12121a;border-bottom:1px solid #26263a;padding:10px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#ff7a1a,#f0b429);color:#1a1205;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex:none}
+.appbar h1{font-size:16px;font-weight:700;color:#fff}
+.appbar small{display:block;font-size:11px;color:#9aa0a6;font-weight:400}
+.conn{margin-left:auto;font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600}
+.conn.on{background:rgba(24,128,56,.25);color:#6ee7a0}
+.conn.off{background:rgba(217,48,37,.25);color:#ff9e94}
+nav{display:flex;overflow-x:auto;background:#12121a;border-bottom:1px solid #26263a;position:sticky;top:58px;z-index:49;padding:0 4px}
+nav button{border:0;background:none;padding:10px 12px;font-size:13px;color:#b9bcc7;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent;font-weight:600}
+nav button.act{color:#ff8c1a;border-bottom-color:#ff8c1a}
+main{max-width:900px;margin:0 auto;padding:10px 10px 40px}
+section{display:none}
+section.show{display:block}
+.card{background:#16161f;border:1px solid #262633;border-radius:14px;padding:14px;margin:10px 0}
+.card h2{font-size:15px;margin-bottom:8px;color:#fff}
+.card h3{font-size:13px;margin:10px 0 6px;color:#ff8c1a}
+label{display:block;font-size:12px;color:#b9bcc7;margin:8px 0 3px;font-weight:600}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid #2c2c3a;border-radius:10px;font-size:14px;background:#0f0f16;color:#f2f2f5}
+textarea{min-height:70px;resize:vertical}
+.btn{display:inline-block;background:linear-gradient(135deg,#ff7a1a,#ff9440);color:#1a1205;border:0;border-radius:22px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;margin:8px 6px 0 0}
+.btn2{background:transparent;color:#c9b8ff;border:1px solid #8b5cf6}
+.btnok{background:linear-gradient(135deg,#188038,#2aa159);color:#fff}
+.btnwarn{background:linear-gradient(135deg,#f0b429,#f7d060);color:#1a1205}
+.btndan{background:transparent;color:#ff9e94;border:1px solid #d93025}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px}
+.PBORRADOR{background:rgba(160,160,180,.15);color:#b9bcc7}
+.PPUBLICADO,.PVERIFICADO{background:rgba(24,128,56,.25);color:#6ee7a0}
+.PPENDIENTE,.PPORV{background:rgba(240,180,41,.18);color:#f0d47a}
+.PRECHAZADO,.PVENCIDO{background:rgba(217,48,37,.25);color:#ff9e94}
+.item{border-left:3px solid #ff7a1a;background:#1b1b26;border-radius:0 10px 10px 0;padding:10px;margin:8px 0;font-size:13px}
+.item b{font-size:14px;color:#fff}
+.item .meta{color:#b9bcc7;font-size:12px;margin-top:3px}
+.item .act{margin-top:6px}
+.note{background:rgba(240,180,41,.08);border:1px solid #6b5a1e;border-radius:12px;padding:10px;font-size:12px;color:#f0d47a;margin:10px 0}
+.info{background:rgba(139,92,246,.10);border:1px solid #4c3a8a;border-radius:12px;padding:10px;font-size:12px;color:#c9b8ff;margin:10px 0}
+.map-wrap{position:relative;height:56vh;min-height:340px;background:#0e0e14;overflow:hidden;border-radius:14px;border:1px solid #262633}
+.tiles,.pins{position:absolute;inset:0}
+.tile{position:absolute;width:256px;height:256px;background:#1a1a24;background-size:256px 256px}
+.pin{position:absolute;transform:translate(-9px,-30px);text-align:center}
+.pin .dot{width:18px;height:18px;border-radius:50% 50% 50% 0;background:#ff7a1a;transform:rotate(-45deg);margin:0 auto;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.pin span{display:inline-block;background:#ff7a1a;color:#1a1205;font-size:11px;padding:2px 7px;border-radius:10px;margin-bottom:2px;white-space:nowrap}
+.mapctrl{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
+.mapctrl button{width:38px;height:38px;border-radius:10px;border:1px solid #2c2c3a;background:#16161f;font-size:16px;cursor:pointer;font-weight:700;color:#ff8c1a}
+.attr{position:absolute;bottom:2px;right:6px;font-size:10px;color:#9aa0a6;background:rgba(11,11,16,.8);padding:1px 6px;border-radius:6px;z-index:5}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1;min-width:130px}
+.kpis{display:flex;gap:8px;flex-wrap:wrap}
+.kpi{flex:1;min-width:110px;background:#16161f;border:1px solid #262633;border-radius:12px;padding:12px;text-align:center}
+.kpi b{display:block;font-size:22px;color:#f0b429}
+.kpi span{font-size:11px;color:#9aa0a6}
+footer{text-align:center;font-size:11px;color:#6f7280;padding:16px 0 30px}
+.small{font-size:12px;color:#b9bcc7}
+.hash{font-size:10px;color:#6f7280;word-break:break-all}
+.hide{display:none}
+@media print{.appbar,nav,.btn,.mapctrl{display:none}section{display:block}}
+</style>
+</head>
+<body>
+<div class="appbar">
+<div class="logo">VTS</div>
+<div><h1>VERBUM HUB CUBA V2.0<small>Territorio en tiempo real · offline-first · datos reales</small></h1></div>
+<span class="conn off" id="conn">Sin conexión</span>
+</div>
+<nav id="nav"></nav>
+<main>
+<section id="sec-inicio">
+<div class="card"><h2>Estado del sistema</h2>
+<div class="kpis">
+<div class="kpi"><b id="kNeg">0</b><span>Negocios</span></div>
+<div class="kpi"><b id="kNec">0</b><span>Necesidades</span></div>
+<div class="kpi"><b id="kLog">0</b><span>Logística</span></div>
+<div class="kpi"><b id="kCol">0</b><span>Cobros pendientes</span></div>
+<div class="kpi"><b id="kCola">0</b><span>En cola de envío</span></div>
+</div>
+<p class="small" style="margin-top:10px" id="resumenTx"></p>
+<button class="btn" onclick="sincronizarAhora()">Sincronizar ahora</button>
+</div>
+<div class="info">Datos reales en vivo: clima por municipio (Open-Meteo), mapa satelital (Esri World Imagery) y callejero (OpenStreetMap), geocodificación (Nominatim) e ingesta comunitaria (Telegram Bot API). Sin servidores propios: todo se guarda en este dispositivo y funciona sin conexión una vez cargado.</div>
+</section>
+<section id="sec-mapa">
+<div class="card"><h2>Mapa territorial</h2>
+<div class="row">
+<select id="mprov" onchange="fillMuniSel('mmuni',this.value)"></select>
+<select id="mmuni"></select>
+</div>
+<button class="btn btn2" onclick="irMunicipio()">Ir al municipio</button>
+</div>
+<div class="map-wrap" id="mapview">
+<div class="tiles" id="tiles"></div>
+<div class="pins" id="pins"></div>
+<div class="mapctrl">
+<button onclick="zoomIn()">+</button>
+<button onclick="zoomOut()">&minus;</button>
+<button id="layerbtn" title="Cambiar capa" onclick="cambiarCapa()">&#9978;</button>
+<button id="locbtn" title="Mi ubicación" onclick="miUbicacion()">&#9679;</button>
+</div>
+<div class="attr" id="attr"></div>
+</div>
+<p class="small">El mapa se guarda en el dispositivo la primera vez que se carga con conexión; después abre sin internet. Desliza para mover, +/− para acercar.</p>
+</section>
+<section id="sec-clima">
+<div class="card"><h2>Clima hiperlocal por municipio</h2>
+<div class="row">
+<select id="cprov" onchange="fillMuniSel('cmuni',this.value)"></select>
+<select id="cmuni"></select>
+</div>
+<button class="btn" onclick="loadWeather()">Ver clima del municipio</button>
+<div id="wout"></div>
+<p class="small">Datos reales de Open-Meteo. La primera consulta de cada municipio pide su ubicación al mapa (Nominatim) y la guarda; después funciona sin conexión mostrando los últimos datos guardados con su hora.</p>
+</div>
+</section>
+<section id="sec-negocios">
+<div class="card"><h2>Puntos de venta y servicios (negocios)</h2>
+<label>Nombre del negocio</label><input id="nNom" placeholder="Ej: Cafetería El Faro">
+<label>Tipo de actividad</label><input id="nTipo" placeholder="Ej: gastronomía, reparación, venta de repuestos">
+<label>Municipio</label><select id="nMuni" onchange="syncProv('nProv',this.value)"></select>
+<input id="nProv" type="hidden">
+<label>Contacto (teléfono o vía)</label><input id="nContacto">
+<label>Servicios o productos que ofrece</label><textarea id="nServ"></textarea>
+<button class="btn" onclick="crearNegocio()">Registrar punto de venta</button>
+</div>
+<div class="card"><h2>Negocios registrados</h2><div id="listNeg"></div></div>
+</section>
+<section id="sec-necesidades">
+<div class="card"><h2>Necesidades de la comunidad</h2>
+<label>Categoría</label>
+<select id="neCat"><option>Medicamentos</option><option>Alimentos</option><option>Materiales de construcción</option><option>Repuestos y técnicos</option><option>Combustible y energía</option><option>Otro</option></select>
+<label>Qué se necesita</label><textarea id="neTxt"></textarea>
+<label>Municipio</label><select id="neMuni" onchange="syncProv('neProv',this.value)"></select>
+<input id="neProv" type="hidden">
+<label>Contacto</label><input id="neContacto">
+<label>Urgencia</label><select id="neUrg"><option>Normal</option><option>Alta</option><option>Urgente</option></select>
+<button class="btn" onclick="crearNecesidad()">Publicar necesidad</button>
+</div>
+<div class="card"><h2>Necesidades publicadas</h2><div id="listNec"></div></div>
+</section>
+<section id="sec-logistica">
+<div class="card"><h2>Logística: solicitudes de transporte</h2>
+<label>Qué se debe transportar</label><input id="lsQue" placeholder="Ej: 40 bolsas de cemento">
+<label>Origen</label><input id="lsOrigen" placeholder="Ej: Marianao">
+<label>Destino</label><input id="lsDestino" placeholder="Ej: Guanabacoa">
+<label>Fecha deseada</label><input id="lsFecha" type="date">
+<label>Contacto</label><input id="lsContacto">
+<button class="btn" onclick="crearLogistica(1)">Solicitar transporte</button>
+</div>
+<div class="card"><h2>Logística: ofrecimientos de transporte</h2>
+<label>Vehículo y capacidad</label><input id="loVeh" placeholder="Ej: camioneta, 2 toneladas">
+<label>Ruta habitual</label><input id="loRuta" placeholder="Ej: Habana Vieja a San José de las Lajas">
+<label>Tarifa o condición</label><input id="loTarifa">
+<label>Contacto</label><input id="loContacto">
+<button class="btn btnok" onclick="crearLogistica(2)">Ofrecer transporte</button>
+</div>
+<div class="card"><h2>Tablero logístico</h2><div id="listLog"></div></div>
+</section>
+<section id="sec-ingesta">
+<div class="card"><h2>Ingesta comunitaria en tiempo real</h2>
+<div class="info">Canal nativo: <b>Telegram</b> (bot gratuito, lee los mensajes del grupo cuando hay conexión). WhatsApp y Facebook no tienen API abierta para leer grupos: aquí se pegan o reenvían manualmente y el sistema los clasifica igual.</div>
+<label>Estado de Telegram</label>
+<p class="small" id="tgEstado"></p>
+<button class="btn" onclick="syncTelegram()">Sincronizar Telegram</button>
+<h3>Captura manual (WhatsApp / Facebook)</h3>
+<select id="manOrigen"><option value="WHATSAPP">WhatsApp</option><option value="FACEBOOK">Facebook</option><option value="OTRO">Otro</option></select>
+<textarea id="manTxt" placeholder="Pega aquí el texto del mensaje..."></textarea>
+<button class="btn btn2" onclick="capturaManual()">Añadir a la bandeja</button>
+</div>
+<div class="card"><h2>Bandeja de ingesta <span class="small" id="ingCount"></span></h2><div id="listIng"></div></div>
+</section>
+<section id="sec-cobros">
+<div class="card"><h2>Solución de cobro y pagos</h2>
+<div class="note"><b>Cómo funciona con Transfermóvil:</b> Transfermóvil y EnZona no ofrecen API pública para comercios, así que la integración real se hace por conciliación: la persona paga a la tarjeta del negocio desde Transfermóvil, registra aquí el código de operación, y el administrador verifica y publica. Es el mismo modelo que usan las plataformas cubanas. Tus tarjetas y datos de cobro se guardan solo en este dispositivo.</div>
+<label>Nueva publicación promocionada (genera el cobro)</label>
+<div class="row">
+<input id="pTit" placeholder="Título del anuncio o servicio">
+<input id="pMuni" placeholder="Municipio">
+</div>
+<textarea id="pTxt" placeholder="Texto del anuncio: qué ofreces, precios, contacto..."></textarea>
+<input id="pContacto" placeholder="Contacto">
+<button class="btn" onclick="crearPromocion()">Crear anuncio + cobro</button>
+<p class="small" id="cobroCfg"></p>
+</div>
+<div class="card"><h2>Cobros</h2><div id="listCobros"></div></div>
+</section>
+<section id="sec-core">
+<div class="card"><h2>VTS CORE: trazabilidad y bitácora</h2>
+<p class="small">Cada registro lleva ID único, estado, bitácora y huella SHA-256 local (no certificatoria). Estados: BORRADOR, PUBLICADO, VERIFICADO, RECHAZADO, VENCIDO.</p>
+<div id="listCore"></div>
+</div>
+<div class="card"><h2>Respaldo</h2>
+<button class="btn btn2" onclick="exportJSON()">Exportar respaldo JSON</button>
+<label style="margin-top:8px"><input type="checkbox" id="expCobros" style="width:auto"> Incluir tarjetas y datos de cobro (solo si el dispositivo es tuyo)</label>
+<div class="row" style="margin-top:8px">
+<input type="file" id="impFile" accept=".json">
+<button class="btn2 btn" onclick="importJSON()">Importar respaldo</button>
+</div>
+<button class="btn btn2" onclick="window.print()">Imprimir / PDF</button>
+</div>
+</section>
+<section id="sec-config">
+<div class="card"><h2>Configuración</h2>
+<h3>Telegram (ingesta en vivo)</h3>
+<label>Token del bot (lo genera @BotFather en Telegram)</label><input id="cfgToken" placeholder="123456:ABC...">
+<label>ID o nombre del grupo/canal</label><input id="cfgChat" placeholder="Ej: -1001234567890">
+<h3>Parámetros de cobro</h3>
+<div class="row">
+<div><label>Costo por anuncio (CUP)</label><input id="cfgCosto" type="number"></div>
+<div><label>Vigencia (días)</label><input id="cfgVig" type="number"></div>
+</div>
+<label>Tarjeta Transfermóvil</label><input id="cfgTM" placeholder="Número de tarjeta">
+<label>Tarjeta EnZona</label><input id="cfgEZ" placeholder="Número de tarjeta">
+<label>Tarjeta / cuenta bancaria</label><input id="cfgBanco" placeholder="Número">
+<label>Instrucciones de pago que verá la comunidad</label><textarea id="cfgInstr"></textarea>
+<button class="btn" onclick="guardarConfig()">Guardar configuración</button>
+</div>
+<div class="card"><h2>Zona sensible</h2>
+<button class="btn btndan" onclick="borrarTodo()">Borrar todos los datos del dispositivo</button>
+</div>
+</section>
+<section id="sec-diag">
+<div class="card"><h2>Diagnóstico de conexión y permisos</h2>
+<button class="btn" onclick="runDiag()">Ejecutar diagnóstico</button>
+<div id="diagOut"></div>
+<div class="note">La vista previa dentro de Fo y el archivo abierto como documento NO pueden conectarse (sandbox). Para probar todo: abre la app en Chrome con el enlace publicado, o guarda el archivo y ábrelo con Chrome en el móvil.</div>
+</div>
+<div class="card"><h2>Cómo activar cada permiso</h2>
+<h3>Ubicación (mapa)</h3>
+<p class="small">La geolocalización solo funciona si la app se abre por https: usa el enlace publicado. Chrome te preguntará "Permitir ubicación": di Sí. En Android también: Ajustes > Aplicaciones > Chrome > Permisos > Ubicación > Permitir. Si el GPS falla, la app siempre permite elegir el municipio manualmente.</p>
+<h3>Telegram (ingesta en vivo)</h3>
+<p class="small">1. En Telegram busca @BotFather, manda /newbot, elige nombre y usuario, y copia el token que te da. 2. Pégalo en Config y guarda. 3. Crea tu grupo (o usa uno existente) y añade al bot como administrador. 4. Escribe un mensaje cualquiera en el grupo. 5. Aquí abajo pulsa "Detectar ID del grupo" y elige tu chat. 6. Vuelve a "Ingesta" y pulsa "Sincronizar Telegram". Desde entonces sincroniza solo cada 2 minutos cuando haya conexión.</p>
+<h3>Almacenamiento</h3>
+<p class="small">No pide permiso: los datos, el mapa y el clima se guardan solos en el dispositivo (IndexedDB y localStorage).</p>
+<h3>WhatsApp y Facebook</h3>
+<p class="small">No tienen API abierta para leer grupos: no hay permiso que activar. Se capturan pegando el mensaje en la bandeja de Ingesta.</p>
+</div>
+<div class="card"><h2>ID del grupo de Telegram</h2>
+<button class="btn btn2" onclick="detectChatId()">Detectar ID del grupo</button>
+<div id="chatList"></div>
+</div>
+</section>
+<footer>VERBUM Tech Solution · Sistema territorial offline-first · Datos en tu dispositivo · Cotejo oficial pendiente</footer>
+<script>
+"use strict";
+function el(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
+function nowStr(){return new Date().toLocaleString("es-CU",{hour12:false})}
+function todayStr(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function genId(pre){return pre+"-"+Date.now().toString(36).toUpperCase()+"-"+Math.floor(Math.random()*1e6).toString(36).toUpperCase()}
+var LSKEY="vth2state";
+function dflt(){return {records:[],cobros:[],queue:[],config:{costoCUP:300,vigenciaDias:40,tarjetas:{transfermovil:"",enzona:"",banco:""},instrucciones:"Pague por Transfermóvil a la tarjeta indicada y registre aquí el código de operación de la transferencia. El administrador verifica el pago y el anuncio queda publicado con su vigencia."},telegram:{token:"",chatId:"",offset:0},geoCache:{}}}
+var state=(function(){try{var s=JSON.parse(localStorage.getItem(LSKEY));if(!s||!s.records)return dflt();return s}catch(e){return dflt()}})();
+function save(){localStorage.setItem(LSKEY,JSON.stringify(state))}
+function sha256(txt){if(window.crypto&&crypto.subtle){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(txt)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return ("0"+x.toString(16)).slice(-2)}).join("")})}return Promise.resolve("(hash no disponible)")}
+function hashRec(r){return sha256(JSON.stringify({id:r.id,tipo:r.tipo,creado:r.creado,t:(r.titulo||"")+"|"+(r.texto||"")})).then(function(h){r.hash=h})}
+function bit(r,texto,estado){r.bitacora=r.bitacora||[];r.bitacora.push({t:texto,ts:nowStr()});if(estado)r.estado=estado}
+var idb=null;
+function openIDB(){return new Promise(function(res){try{var r=indexedDB.open("vth2cache",1);r.onupgradeneeded=function(e){var d=e.target.result;if(!d.objectStoreNames.contains("tiles"))d.createObjectStore("tiles");if(!d.objectStoreNames.contains("weather"))d.createObjectStore("weather")};r.onsuccess=function(e){idb=e.target.result;res(true)};r.onerror=function(){res(false)}}catch(e){res(false)}})}
+function idbGet(st,k){return new Promise(function(res){if(!idb)return res(null);try{var g=idb.transaction(st).objectStore(st).get(k);g.onsuccess=function(){res(g.result||null)};g.onerror=function(){res(null)}}catch(e){res(null)}})}
+function idbPut(st,k,v){try{if(idb)idb.transaction(st,"readwrite").objectStore(st).put(v,k)}catch(e){}}
+var PROV={"La Habana":[["Playa",23.132,-82.407],["Plaza de la Revolución",23.140,-82.390],["Centro Habana",23.141,-82.378],["Habana Vieja",23.140,-82.354],["Cerro",23.118,-82.350],["Diez de Octubre",23.104,-82.352],["Marianao",23.130,-82.429],["La Lisa",23.092,-82.442],["Boyeros",23.046,-82.392],["Arroyo Naranjo",23.046,-82.339],["San Miguel del Padrón",23.082,-82.300],["Habana del Este",23.160,-82.298],["Guanabacoa",23.128,-82.289],["Regla",23.128,-82.329],["Cotorro",23.083,-82.258]],
+"Artemisa":["Artemisa","Bauta","Caimito","Guanajay","Mariel","San Antonio de los Baños","Güira de Melena","Alquízar","San Cristóbal","Bahía Honda","Candelaria"],
+"Mayabeque":["San José de las Lajas","Güines","Madruga","Nueva Paz","Santa Cruz del Norte","Jaruco","San Nicolás","Batabanó","Melena del Sur","Quivicán","Bejucal"],
+"Matanzas":["Matanzas","Cárdenas","Colón","Jovellanos","Unión de Reyes","Ciénaga de Zapata","Calimete","Perico","Limonar","Los Arabos"],
+"Villa Clara":["Santa Clara","Sagua la Grande","Placetas","Camajuaní","Caibarién","Remedios","Cifuentes","Ranchuelo","Quemado de Güines"],
+"Cienfuegos":["Cienfuegos","Rodas","Palmira","Lajas","Cruces","Aguada de Pasajeros","Cumanayagua","Abreus"],
+"Sancti Spíritus":["Sancti Spíritus","Trinidad","Cabaiguán","Fomento","Yaguajay","La Sierpe"],
+"Ciego de Ávila":["Ciego de Ávila","Morón","Bolivia","Primero de Enero","Chambas","Baraguá"],
+"Camagüey":["Camagüey","Nuevitas","Florida","Minas","Guáimaro","Santa Cruz del Sur","Esmeralda","Sibanicú"],
+"Las Tunas":["Las Tunas","Puerto Padre","Manatí","Amancio","Colombia","Jobabo","Majibacoa"],
+"Holguín":["Holguín","Moa","Banes","Gibara","Rafael Freyre","Sagua de Tánamo","Cueto","Mayarí","Antilla"],
+"Granma":["Bayamo","Manzanillo","Campechuela","Niquero","Media Luna","Pilón","Yara","Jiguaní","Guisa","Río Cauto"],
+"Santiago de Cuba":["Santiago de Cuba","Palma Soriano","Contramaestre","San Luis","Songo-La Maya","Mella","Segundo Frente","Tercer Frente","El Cobre"],
+"Guantánamo":["Guantánamo","Baracoa","Maisí","Imías","San Antonio del Sur","Yateras","El Salvador","Manuel Tames"],
+"Pinar del Río":["Pinar del Río","Viñales","Los Palacios","Consolación del Sur","San Juan y Martínez","San Luis","La Palma","Mantua","Minas de Matahambre"],
+"Isla de la Juventud":["Isla de la Juventud (Nueva Gerona)"]};
+function provNames(p){var a=PROV[p]||[];return a.map(function(x){return Array.isArray(x)?x[0]:x})}
+function muniCoords(p,m){var a=PROV[p]||[];for(var i=0;i<a.length;i++){if(Array.isArray(a[i])&&a[i][0]===m)return {lat:a[i][1],lon:a[i][2]}}return null}
+function geocode(muni,prov){var key=muni+"|"+prov;if(state.geoCache[key])return Promise.resolve(state.geoCache[key]);var q=encodeURIComponent(muni+", "+prov+", Cuba");return fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&q="+q).then(function(r){return r.json()}).then(function(a){if(a&&a.length){var c={lat:parseFloat(a[0].lat),lon:parseFloat(a[0].lon)};state.geoCache[key]=c;save();return c}return null}).catch(function(){return null})}
+var MAP={lat:23.135,lon:-82.37,z:11,layer:"sat",sel:null,user:null};
+function lon2x(lon,z){return (lon+180)/360*256*Math.pow(2,z)}
+function lat2y(lat,z){var r=lat*Math.PI/180;return (1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*256*Math.pow(2,z)}
+function x2lon(x,z){return x/(256*Math.pow(2,z))*360-180}
+function y2lat(y,z){var n=Math.PI*(1-2*y/(256*Math.pow(2,z)));return Math.atan(Math.sinh(n))*180/Math.PI}
+function tileURL(layer,z,x,y){if(layer==="sat")return "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/"+z+"/"+y+"/"+x;return "https://tile.openstreetmap.org/"+z+"/"+x+"/"+y+".png"}
+function drawMap(){var c=el("mapview");if(!c||!c.offsetWidth)return;var w=c.offsetWidth,h=c.offsetHeight;var z=MAP.z;var cx=lon2x(MAP.lon,z),cy=lat2y(MAP.lat,z);var x0=cx-w/2,y0=cy-h/2;var html="",vis={};
+for(var tx=Math.floor(x0/256);tx<=Math.floor((x0+w)/256);tx++){for(var ty=Math.floor(y0/256);ty<=Math.floor((y0+h)/256);ty++){var key=MAP.layer+"/"+z+"/"+tx+"/"+ty;vis[key]=1;html+='<div class="tile" style="left:'+(tx*256-x0)+'px;top:'+(ty*256-y0)+'px" data-k="'+key+'"></div>';}}
+el("tiles").innerHTML=html;
+var ph="";
+if(MAP.user){var ux=lon2x(MAP.user.lon,z)-x0,uy=lat2y(MAP.user.lat,z)-y0;ph+='<div class="pin" style="left:'+ux+'px;top:'+uy+'px"><div class="dot" style="background:#188038"></div><span>Mi ubicación</span></div>'}
+if(MAP.sel){var px=lon2x(MAP.sel.lon,z)-x0,py=lat2y(MAP.sel.lat,z)-y0;ph+='<div class="pin" style="left:'+px+'px;top:'+py+'px"><div class="dot"></div><span>'+esc(MAP.sel.name)+'</span></div>'}
+el("pins").innerHTML=ph;
+el("attr").textContent=MAP.layer==="sat"?"Mapa satelital: Esri World Imagery":"Mapa: OpenStreetMap";
+var divs=el("tiles").children;
+for(var i=0;i<divs.length;i++){loadTile(divs[i])}
+}
+function loadTile(div){var key=div.getAttribute("data-k");var p=key.split("/");
+idbGet("tiles",key).then(function(b){if(b){show(b);return}
+fetch(tileURL(p[0],+p[1],+p[2],+p[3])).then(function(r){if(!r.ok)throw new Error("tile");return r.blob()}).then(function(b2){idbPut("tiles",key,b2);show(b2)}).catch(function(){div.style.background="repeating-linear-gradient(45deg,#cfd6de,#cfd6de 8px,#dde3ea 8px,#dde3ea 16px)"})});
+function show(b){try{var o=URL.createObjectURL(b);div.style.backgroundImage="url("+o+")"}catch(e){}}
+}
+var dragOn=false,dragX=0,dragY=0,dragLat=0,dragLon=0;
+function bindMap(){var c=el("mapview");
+c.addEventListener("pointerdown",function(e){dragOn=true;dragX=e.clientX;dragY=e.clientY;dragLat=MAP.lat;dragLon=MAP.lon;c.setPointerCapture(e.pointerId)});
+c.addEventListener("pointermove",function(e){if(!dragOn)return;var dx=e.clientX-dragX,dy=e.clientY-dragY;MAP.lon=x2lon(lon2x(dragLon,MAP.z)-dx,MAP.z);MAP.lat=y2lat(lat2y(dragLat,MAP.z)-dy,MAP.z);drawMap()});
+c.addEventListener("pointerup",function(){dragOn=false});
+c.addEventListener("pointercancel",function(){dragOn=false});
+c.addEventListener("dblclick",function(){if(MAP.z<17){MAP.z++;drawMap()}})}
+function zoomIn(){if(MAP.z<17){MAP.z++;drawMap()}}
+function zoomOut(){if(MAP.z>4){MAP.z--;drawMap()}}
+function cambiarCapa(){MAP.layer=MAP.layer==="sat"?"osm":"sat";drawMap()}
+function miUbicacion(){if(!navigator.geolocation){toast("Este navegador no permite geolocalización");return}navigator.geolocation.getCurrentPosition(function(p){MAP.user={lat:p.coords.latitude,lon:p.coords.longitude};MAP.lat=p.coords.latitude;MAP.lon=p.coords.longitude;if(MAP.z<13)MAP.z=13;drawMap();toast("Ubicación obtenida")},function(){toast("No se pudo obtener ubicación. Seleccione el municipio manualmente.")})}
+function fillProv(id){var opts="";Object.keys(PROV).forEach(function(p){opts+='<option value="'+esc(p)+'">'+esc(p)+"</option>"});el(id).innerHTML=opts}
+function fillMuniSel(id,prov){var names=provNames(prov||"La Habana");var opts="";names.forEach(function(n){opts+='<option value="'+esc(n)+'">'+esc(n)+"</option>"});el(id).innerHTML=opts}
+function irMunicipio(){var p=el("mprov").value,m=el("mmuni").value;resolverMunicipio(p,m).then(function(c){if(!c){toast("No se pudo ubicar el municipio (requiere conexión la primera vez)");return}MAP.sel={name:m,lat:c.lat,lon:c.lon};MAP.lat=c.lat;MAP.lon=c.lon;if(MAP.z<12)MAP.z=12;drawMap();toast("Centrado en "+m)})}
+function resolverMunicipio(p,m){var c=muniCoords(p,m);if(c)return Promise.resolve(c);return geocode(m,p)}
+function syncProv(hiddenId,muniSelId){/* placeholder */}
+var WC={0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",45:"Niebla",48:"Niebla escarchada",51:"Llovizna ligera",53:"Llovizna",55:"Llovizna intensa",61:"Lluvia ligera",63:"Lluvia",65:"Lluvia fuerte",66:"Lluvia helada",67:"Lluvia helada fuerte",80:"Chubascos ligeros",81:"Chubascos",82:"Chubascos fuertes",95:"Tormenta eléctrica",96:"Tormenta con granizo",99:"Tormenta fuerte con granizo"};
+function loadWeather(){var p=el("cprov").value,m=el("cmuni").value;if(!m)return;resolverMunicipio(p,m).then(function(c){if(!c){wmsg("No se pudo ubicar el municipio. La primera vez se necesita conexión.");return}MAP.sel={name:m,lat:c.lat,lon:c.lon};drawMap();getWeather(c,m)})}
+function getWeather(c,muni){var key=muni;
+idbGet("weather",key).then(function(cv){
+if(!navigator.onLine){if(cv){showWeather(cv.data,cv.ts+" (guardado)")}else{wmsg("Sin conexión y sin datos guardados de este municipio todavía.")}return}
+var u="https://api.open-meteo.com/v1/forecast?latitude="+c.lat+"&longitude="+c.lon+"&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=7&timezone=auto";
+fetch(u).then(function(r){return r.json()}).then(function(d){
+if(!d||!d.current){wmsg("La respuesta del servicio de clima no llegó completa.");return}
+idbPut("weather",key,d);showWeather(d,new Date().toLocaleTimeString("es-CU",{hour:"2-digit",minute:"2-digit"})+" (en vivo)")
+}).catch(function(){if(cv){showWeather(cv.data,cv.ts+" (guardado)")}else{wmsg("Sin conexión y sin datos guardados de este municipio todavía.")}})})}
+function wmsg(t){el("wout").innerHTML='<div class="note">'+esc(t)+"</div>"}
+function showWeather(d,ts){var cur=d.current;if(!cur){wmsg("Datos incompletos.");return}
+var h='<div class="card"><h2>'+esc(el("cmuni").value)+" <span class='small'>"+esc(ts)+"</span></h2>";
+h+='<div class="kpis"><div class="kpi"><b>'+Math.round(cur.temperature_2m)+"°C</b><span>Temperatura</span></div><div class='kpi'><b>"+Math.round(cur.apparent_temperature)+"°C</b><span>Sensación</span></div><div class='kpi'><b>"+Math.round(cur.relative_humidity_2m)+"%</b><span>Humedad</span></div><div class='kpi'><b>"+(cur.precipitation||0)+" mm</b><span>Lluvia</span></div><div class='kpi'><b>"+Math.round(cur.wind_speed_10m)+"</b><span>Viento km/h</span></div></div>";
+h+='<p class="small" style="margin:8px 0">'+esc(WC[cur.weather_code]||"Condición "+cur.weather_code)+"</p><h3>Pronóstico 7 días</h3><div class='row'>";
+for(var i=0;i<d.daily.time.length;i++){h+='<div class="kpi"><span>'+esc(d.daily.time[i].slice(5))+"</span><b>"+Math.round(d.daily.temperature_2m_max[i])+"°/"+Math.round(d.daily.temperature_2m_min[i])+"°</b><span>Lluvia "+(d.daily.precipitation_probability_max[i]==null?"-":d.daily.precipitation_probability_max[i])+"%</span></div>"}
+h+="</div></div>";el("wout").innerHTML=h}
+function syncProv(hiddenId,muni){var v=el(hiddenId);if(!v)return;Object.keys(PROV).forEach(function(p){if(provNames(p).indexOf(muni)>=0)v.value=p})}
+function tgCall(method,qs){var t=state.config.telegram.token;if(!t)return Promise.reject(new Error("sin token"));return fetch("https://api.telegram.org/bot"+t+"/"+method+"?"+qs).then(function(r){return r.json()})}
+function tgPost(method,params){var t=state.config.telegram.token;if(!t)return Promise.reject(new Error("sin token"));return fetch("https://api.telegram.org/bot"+t+"/"+method,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(params)}).then(function(r){return r.json()})}
+function syncTelegram(){var t=state.config.telegram.token;if(!t){toast("Guarde primero el token del bot en Config.");return}
+tgCall("getUpdates","offset="+(state.telegram.offset||0)+"&limit=20").then(function(r){
+if(!r||!r.ok){toast("Telegram rechazó la conexión: "+((r&&r.description)||"revise el token"));return}
+var n=0;(r.result||[]).forEach(function(u){var m=u.message;if(m&&m.text){addIngesta("TELEGRAM",(m.from&&(m.from.first_name||m.from.username))||"desconocido",m.text);n++}});
+if(r.result&&r.result.length)state.telegram.offset=r.result[r.result.length-1].update_id+1;
+save();renderAll();toast(n?("Telegram: "+n+" mensajes nuevos"):"Telegram sin mensajes nuevos")}).catch(function(){toast("No se pudo conectar con Telegram (verifique conexión o token)")})}
+function capturaManual(){var t=el("manTxt").value.trim();if(!t){toast("Pegue primero el texto del mensaje");return}addIngesta(el("manOrigen").value,"manual",t);el("manTxt").value="";save();renderAll();toast("Mensaje añadido a la bandeja")}
+function addIngesta(origen,autor,texto){var r={id:genId("ING"),tipo:"ingesta",origen:origen,autor:autor,texto:texto,municipio:"",estado:"BORRADOR",bitacora:[{t:"Recibido por ingesta "+origen,ts:nowStr()}],creado:Date.now()};state.records.push(r);hashRec(r).then(function(){save();renderAll()});return r}
+function sugerir(texto){var t=(texto||"").toLowerCase();if(/transporte|llevo|camion|cami[oó]n|moto|flete|viajo|viaje/.test(t))return "logistica";if(/busco|necesito|falta|requiero|urgente|d[oó]nde consigo/.test(t))return "necesidad";if(/ofrezco|vendo|se vende|disponible|promo|servicio|bar |cafeteria|cafeter[ií]a|taller|reparo/.test(t))return "negocio";return "necesidad"}
+function clasificar(id,tipo){var r=buscar(id);if(!r)return;var n={id:genId(tipo.slice(0,3).toUpperCase()),tipo:tipo,titulo:"",texto:r.texto,municipio:r.municipio||"",provincia:"",contacto:"",categoria:"",urgencia:"Normal",estado:"BORRADOR",bitacora:[{t:"Convertido desde ingesta "+r.origen+" ("+r.id+")",ts:nowStr()}],creado:Date.now()};
+if(tipo==="negocio")n.titulo="Negocio desde ingesta";
+if(tipo==="necesidad")n.categoria=neCatDe(r.texto);
+if(tipo==="logistica")n.direccion="solicitud";
+state.records.push(n);bit(r,"Convertido a "+tipo,"CERRADO");hashRec(n).then(function(){save();renderAll()});renderAll()}
+function neCatDe(t){t=(t||"").toLowerCase();if(/medic|farmac/.test(t))return "Medicamentos";if(/aliment|comida|arroz|carne/.test(t))return "Alimentos";if(/cement|material|teja/.test(t))return "Materiales de construcción";if(/combust|gas|diesel/.test(t))return "Combustible y energía";return "Otro"}
+function buscar(id){for(var i=0;i<state.records.length;i++){if(state.records[i].id===id)return state.records[i]}return null}
+function crearNegocio(){var m=el("nMuni").value;if(!el("nNom").value.trim()||!m){toast("Faltan nombre y municipio");return}
+var r={id:genId("NEG"),tipo:"negocio",titulo:el("nNom").value.trim(),categoria:el("nTipo").value.trim(),municipio:m,provincia:el("nProv").value||"La Habana",contacto:el("nContacto").value.trim(),texto:el("nServ").value.trim(),estado:"BORRADOR",bitacora:[{t:"Punto de venta creado",ts:nowStr()}],creado:Date.now()};
+state.records.push(r);bit(r,"Registrado en el directorio","PUBLICADO");hashRec(r).then(function(){save();renderAll()});renderAll();limpiar(["nNom","nTipo","nContacto","nServ"]);toast("Negocio registrado")}
+function crearNecesidad(){var m=el("neMuni").value;if(!el("neTxt").value.trim()||!m){toast("Faltan descripción y municipio");return}
+var r={id:genId("NEC"),tipo:"necesidad",titulo:el("neCat").value,categoria:el("neCat").value,texto:el("neTxt").value.trim(),municipio:m,provincia:el("neProv").value||"La Habana",contacto:el("neContacto").value.trim(),urgencia:el("neUrg").value,estado:"BORRADOR",bitacora:[{t:"Necesidad publicada",ts:nowStr()}],creado:Date.now()};
+state.records.push(r);bit(r,"Publicada la necesidad","PUBLICADO");hashRec(r).then(function(){save();renderAll()});renderAll();limpiar(["neTxt","neContacto"]);toast("Necesidad publicada")}
+function crearLogistica(tipo){var r;if(tipo===1){if(!el("lsQue").value.trim()){toast("Indique qué se debe transportar");return}
+r={id:genId("LOG"),tipo:"logistica",titulo:"Solicitud: "+el("lsQue").value.trim(),direccion:"solicitud",detalle:el("lsQue").value.trim(),origen:el("lsOrigen").value.trim(),destino:el("lsDestino").value.trim(),fecha:el("lsFecha").value,contacto:el("lsContacto").value.trim(),estado:"BORRADOR",bitacora:[{t:"Solicitud de transporte creada",ts:nowStr()}],creado:Date.now()};limpiar(["lsQue","lsOrigen","lsDestino","lsContacto"])}
+else{if(!el("loVeh").value.trim()){toast("Indique el vehículo y su capacidad");return}
+r={id:genId("LOG"),tipo:"logistica",titulo:"Ofrecimiento: "+el("loVeh").value.trim(),direccion:"ofrecimiento",detalle:el("loVeh").value.trim(),origen:el("loRuta").value.trim(),tarifa:el("loTarifa").value.trim(),contacto:el("loContacto").value.trim(),estado:"BORRADOR",bitacora:[{t:"Ofrecimiento de transporte creado",ts:nowStr()}],creado:Date.now()};limpiar(["loVeh","loRuta","loTarifa","loContacto"])}
+r.municipio=el("nMuni")?el("nMuni").value:"";state.records.push(r);bit(r,"Registrado en logística","PUBLICADO");hashRec(r).then(function(){save();renderAll()});renderAll();toast(tipo===1?"Solicitud registrada":"Ofrecimiento registrado")}
+function limpiar(ids){ids.forEach(function(i){var e=el(i);if(e)e.value=""})}
+function crearPromocion(){var m=el("pMuni").value.trim();if(!el("pTit").value.trim()||!m){toast("Faltan título y municipio");return}
+var r={id:genId("PRO"),tipo:"promocion",titulo:el("pTit").value.trim(),texto:el("pTxt").value.trim(),municipio:m,contacto:el("pContacto").value.trim(),estado:"BORRADOR",bitacora:[{t:"Anuncio promocionado creado",ts:nowStr()}],creado:Date.now()};
+var cb={id:genId("COB"),recordId:r.id,concepto:"Anuncio promocionado: "+r.titulo,monto:+(state.config.costoCUP||300),vigencia:+(state.config.vigenciaDias||40),estadoPago:"PENDIENTE",metodo:"",codigo:"",fechaPago:"",titular:"",vence:null,creado:Date.now()};
+state.records.push(r);state.cobros.push(cb);bit(r,"Generado cobro "+cb.id+" por "+cb.monto+" CUP","PENDIENTE");hashRec(r).then(function(){save();renderAll()});renderAll();limpiar(["pTit","pTxt","pMuni","pContacto"]);toast("Anuncio creado. Registre el pago del cliente para verificarlo.")}
+function regPago(id){var cb=null;for(var i=0;i<state.cobros.length;i++){if(state.cobros[i].id===id)cb=state.cobros[i]}if(!cb)return;
+cb.metodo=el("pgMet_"+id)?el("pgMet_"+id).value:"Transfermóvil";cb.codigo=el("pgCod_"+id)?el("pgCod_"+id).value.trim():"";cb.fechaPago=el("pgFec_"+id)?el("pgFec_"+id).value:todayStr();cb.titular=el("pgTit_"+id)?el("pgTit_"+id).value.trim():"";
+if(!cb.codigo){toast("Registre el código de operación de la transferencia");return}
+cb.estadoPago="POR VERIFICAR";var r=buscar(cb.recordId);if(r)bit(r,"Pago registrado por el cliente: "+cb.metodo+", código "+cb.codigo,"PENDIENTE");save();renderAll()}
+function verCobro(id,ok){var cb=null;for(var i=0;i<state.cobros.length;i++){if(state.cobros[i].id===id)cb=state.cobros[i]}if(!cb)return;
+var r=buscar(cb.recordId);
+if(ok){cb.estadoPago="VERIFICADO";cb.vence=addDays(cb.vigencia||40);if(r)bit(r,"Pago VERIFICADO por el administrador. Publicado con vigencia hasta "+cb.vence,"PUBLICADO")}
+else{cb.estadoPago="RECHAZADO";if(r)bit(r,"Pago RECHAZADO por el administrador","RECHAZADO")}
+save();renderAll();toast(ok?"Pago verificado y anuncio publicado":"Pago rechazado")}
+function publicarTG(id){var r=buscar(id);if(!r)return;var chat=state.config.telegram.chatId;if(!chat){toast("Configure el grupo de Telegram en Config.");return}
+var txt="📢 "+(r.titulo||"")+"\n"+(r.texto||"")+(r.municipio?"\n📍 "+r.municipio:"")+(r.contacto?"\n☎ "+r.contacto:"")+"\n— vía VERBUM HUB CUBA";
+if(navigator.onLine&&state.config.telegram.token){tgPost("sendMessage",{chat_id:chat,text:txt}).then(function(res){if(res&&res.ok){bit(r,"Publicado en el grupo de Telegram","PUBLICADO")}else{bit(r,"Telegram rechazó la publicación: "+((res&&res.description)||"error"),"BORRADOR")}save();renderAll()}).catch(function(){state.queue.push({chatId:chat,text:txt,ref:r.id,ts:nowStr()});bit(r,"Sin conexión: en cola de envío","BORRADOR");save();renderAll();toast("En cola: se enviará al reconectar")})}
+else{state.queue.push({chatId:chat,text:txt,ref:r.id,ts:nowStr()});bit(r,"Sin conexión: en cola de envío","BORRADOR");save();renderAll();toast("En cola: se enviará al reconectar")}}
+function cerrar(id){var r=buscar(id);if(!r)return;bit(r,"Registro cerrado","CERRADO");save();renderAll()}
+function renderAll(){renderInicio();renderIng();renderNeg();renderNec();renderLog();renderCobros();renderCore();renderTgEstado();renderCobroCfg()}
+function estadoPill(e){return '<span class="pill P'+String(e||"").replace(/ /g,"")+'">'+esc(e)+"</span>"}
+function bitHTML(r){var n=(r.bitacora||[]).length;return n?('<div class="hash">Bitácora: '+n+" entradas · ID "+esc(r.id)+(r.hash?" · SHA-256 "+esc(r.hash.slice(0,16))+"…":"")+"</div>"):('<div class="hash">ID '+esc(r.id)+"</div>")}
+function renderInicio(){var c={negocio:0,necesidad:0,logistica:0};state.records.forEach(function(r){if(c[r.tipo]!=null)c[r.tipo]++});
+var pend=state.cobros.filter(function(x){return x.estadoPago!=="VERIFICADO"&&x.estadoPago!=="RECHAZADO"}).length;
+el("kNeg").textContent=c.negocio;el("kNec").textContent=c.necesidad;el("kLog").textContent=c.logistica;el("kCol").textContent=pend;el("kCola").textContent=state.queue.length;
+var sinVer=state.records.filter(function(r){return r.tipo==="ingesta"&&r.estado==="BORRADOR"}).length;
+el("resumenTx").textContent="Bandeja de ingesta: "+sinVer+" por clasificar. Última acción: "+(state.records.length?(state.records[state.records.length-1].bitacora||[{}]).slice(-1)[0].t||"-":"-")}
+function itemHTML(r,acciones){var h='<div class="item"><b>'+esc(r.titulo||r.texto||r.id)+"</b>"+estadoPill(r.estado);
+var meta=[];if(r.municipio)meta.push("📍 "+r.municipio);if(r.categoria)meta.push(r.categoria);if(r.urgencia&&r.urgencia!=="Normal")meta.push("Urgencia: "+r.urgencia);if(r.origen)meta.push(r.destino?("→ "+r.destino):r.origen);if(r.tarifa)meta.push(r.tarifa);if(r.fecha)meta.push(r.fecha);if(r.contacto)meta.push("☎ "+r.contacto);if(r.detalle&&r.titulo)meta.push(r.detalle);
+if(meta.length)h+='<div class="meta">'+esc(meta.join(" · "))+"</div>";
+if(r.texto&&r.titulo)h+='<div class="meta">'+esc(r.texto.slice(0,220))+"</div>";
+h+=bitHTML(r);if(acciones)h+='<div class="act">'+acciones+"</div>";return h+"</div>"}
+function renderNeg(){var a=state.records.filter(function(r){return r.tipo==="negocio"}).reverse();el("listNeg").innerHTML=a.map(function(r){return itemHTML(r,'<button class="btn2 btn" onclick="publicarTG(\''+r.id+'\')">Publicar en Telegram</button><button class="btn btndan" onclick="cerrar(\''+r.id+'\')">Cerrar</button>')}).join("")||'<p class="small">Sin negocios registrados todavía.</p>'}
+function renderNec(){var a=state.records.filter(function(r){return r.tipo==="necesidad"}).reverse();el("listNec").innerHTML=a.map(function(r){return itemHTML(r,'<button class="btn2 btn" onclick="publicarTG(\''+r.id+'\')">Publicar en Telegram</button><button class="btn btndan" onclick="cerrar(\''+r.id+'\')">Cerrar</button>')}).join("")||'<p class="small">Sin necesidades publicadas todavía.</p>'}
+function renderLog(){var a=state.records.filter(function(r){return r.tipo==="logistica"}).reverse();el("listLog").innerHTML=a.map(function(r){var tag=(r.direccion==="ofrecimiento")?"OFRECE":"BUSCA";return itemHTML(r,'<span class="pill '+(tag==="OFRECE"?"PPUBLICADO":"PPENDIENTE")+'">'+tag+"</span>"+'<button class="btn2 btn" onclick="publicarTG(\''+r.id+'\')">Publicar en Telegram</button>')}).join("")||'<p class="small">Sin movimientos logísticos todavía.</p>'}
+function renderIng(){var a=state.records.filter(function(r){return r.tipo==="ingesta"&&r.estado!=="CERRADO"}).reverse();el("ingCount").textContent="("+a.length+")";
+el("listIng").innerHTML=a.map(function(r){var s=sugerir(r.texto);var acc='<span class="small">Sugerencia: '+s+'</span><br><button class="btn2 btn" onclick="clasificar(\''+r.id+'\',\'necesidad\')">A necesidad</button><button class="btn2 btn" onclick="clasificar(\''+r.id+'\',\'negocio\')">A negocio</button><button class="btn2 btn" onclick="clasificar(\''+r.id+'\',\'logistica\')">A logística</button><button class="btn btndan" onclick="cerrar(\''+r.id+'\')">Descartar</button>';
+var h='<div class="item"><b>'+esc(r.origen)+" · "+esc(r.autor)+"</b>"+estadoPill(r.estado)+'<div class="meta">'+esc((r.texto||"").slice(0,300))+"</div>"+'<div class="hash">'+esc(r.id)+(r.hash?" · "+esc(r.hash.slice(0,16))+"…":"")+"</div>"+'<div class="act">'+acc+"</div></div>";return h}).join("")||'<p class="small">Bandeja vacía. Sincronice Telegram o pegue mensajes manualmente.</p>'}
+function renderCobros(){var a=state.cobros.slice().reverse();
+el("listCobros").innerHTML=a.map(function(cb){var r=buscar(cb.recordId);var vencido=cb.vence&&cb.vence<todayStr();
+var h='<div class="item"><b>'+esc(cb.concepto)+'</b><span class="pill '+(cb.estadoPago==="VERIFICADO"?(vencido?"PVENCIDO":"PPUBLICADO"):cb.estadoPago==="PENDIENTE"?"PPENDIENTE":cb.estadoPago==="POR VERIFICAR"?"PPORV":"PRECHAZADO")+'">'+esc(cb.estadoPago==="POR VERIFICAR"?"POR VERIFICAR":(cb.estadoPago==="VERIFICADO"&&vencido)?"VENCIDO":cb.estadoPago)+'</span><div class="meta">'+cb.monto+" CUP · vigencia "+cb.vigencia+" días"+(cb.vence?" · vence "+cb.vence:"")+"</div>";
+if(cb.codigo)h+='<div class="meta">Pago: '+esc(cb.metodo)+" · código "+esc(cb.codigo)+" · "+esc(cb.fechaPago)+(cb.titular?" · "+esc(cb.titular):"")+"</div>";
+h+=bitHTML(r||{id:cb.recordId,bitacora:[]});
+if(cb.estadoPago==="PENDIENTE"){h+='<div class="act"><label style="display:inline-block;margin-right:6px">Método</label><select id="pgMet_'+cb.id+'" style="width:auto;display:inline-block"><option>Transfermóvil</option><option>EnZona</option><option>Transferencia bancaria</option><option>Efectivo</option></select> <label style="display:inline-block;margin-left:6px">Código de operación</label><input id="pgCod_'+cb.id+'" style="width:130px;display:inline-block" placeholder="Ej: 000123456"> <label style="display:inline-block;margin-left:6px">Fecha</label><input id="pgFec_'+cb.id+'" type="date" style="width:auto;display:inline-block" value="'+todayStr()+'"> <label style="display:inline-block;margin-left:6px">Titular</label><input id="pgTit_'+cb.id+'" style="width:110px;display:inline-block" placeholder="Nombre"> <button class="btn" onclick="regPago(\''+cb.id+'\')">Registrar pago</button></div>'}
+if(cb.estadoPago==="POR VERIFICAR"){h+='<div class="act"><button class="btn btnok" onclick="verCobro(\''+cb.id+'\',true)">Verificar y publicar</button><button class="btn btndan" onclick="verCobro(\''+cb.id+'\',false)">Rechazar</button></div>'}
+if(r&&(r.estado==="PUBLICADO"||r.estado==="BORRADOR")){h+='<div class="act"><button class="btn2 btn" onclick="publicarTG(\''+r.id+'\')">Enviar al grupo de Telegram</button></div>'}
+return h+"</div>"}).join("")||'<p class="small">Sin cobros. Cada anuncio promocionado genera aquí su cobro.</p>'}
+function renderCore(){var ents=[];state.records.forEach(function(r){(r.bitacora||[]).forEach(function(b){ents.push({ts:b.ts,t:b.t,id:r.id,e:r.estado})})});
+ents.reverse();el("listCore").innerHTML=ents.slice(0,120).map(function(b){return '<div class="item"><b>'+esc(b.t)+"</b>"+estadoPill(b.e)+'<div class="meta">'+esc(b.ts)+" · "+esc(b.id)+"</div></div>"}).join("")||'<p class="small">Sin entradas todavía.</p>'}
+function renderTgEstado(){var t=state.config.telegram.token,c=state.config.telegram.chatId;el("tgEstado").innerHTML="Bot: <b>"+(t?"token guardado":"sin token (guárdelo en Config)")+"</b> · Grupo: <b>"+(c?"configurado":"sin grupo")+"</b> · Último ID procesado: "+(state.telegram.offset||"-")}
+function renderCobroCfg(){el("cobroCfg").textContent="Configuración actual: "+(state.config.costoCUP||300)+" CUP por anuncio · vigencia "+(state.config.vigenciaDias||40)+" días · tarjeta Transfermóvil "+(state.config.tarjetas.transfermovil?"guardada":"sin guardar")}
+function exportJSON(){var inc=el("expCobros")&&el("expCobros").checked;var out={meta:{app:"VERBUM HUB CUBA",version:"2.1",exportado:nowStr()},records:state.records,cobros:inc?state.cobros:state.cobros.map(function(c){return {id:c.id,recordId:c.recordId,concepto:c.concepto,monto:c.monto,estadoPago:c.estadoPago,vence:c.vence}}),queue:state.queue,geoCache:state.geoCache,config:{costoCUP:state.config.costoCUP,vigenciaDias:state.config.vigenciaDias,instrucciones:state.config.instrucciones}};
+if(inc)out.config.tarjetas=state.config.tarjetas;out.telegram={chatId:state.config.telegram.chatId};
+var b=new Blob([JSON.stringify(out,null,1)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="VERBUM_HUB_CUBA_V2_respaldo.json";a.click();toast("Respaldo exportado")}
+function importJSON(){var f=el("impFile").files[0];if(!f){toast("Seleccione el archivo JSON");return}var fr=new FileReader();fr.onload=function(){try{var d=JSON.parse(fr.result);var nr=0,nc=0;(d.records||[]).forEach(function(r){if(!buscar(r.id)){state.records.push(r);nr++}});var ids={};state.cobros.forEach(function(c){ids[c.id]=1});(d.cobros||[]).forEach(function(c){if(!ids[c.id]){state.cobros.push(c);nc++}});if(d.geoCache)state.geoCache=d.geoCache;if(d.config){state.config.costoCUP=d.config.costoCUP||state.config.costoCUP;state.config.vigenciaDias=d.config.vigenciaDias||state.config.vigenciaDias;if(d.config.tarjetas)state.config.tarjetas=d.config.tarjetas}if(d.telegram&&d.telegram.chatId)state.config.telegram.chatId=d.telegram.chatId;save();renderAll();toast("Importado: "+nr+" registros, "+nc+" cobros")}catch(e){toast("El archivo no es un respaldo válido")}};fr.readAsText(f)}
+function guardarConfig(){state.config.telegram.token=el("cfgToken").value.trim();state.config.telegram.chatId=el("cfgChat").value.trim();state.config.costoCUP=+el("cfgCosto").value||300;state.config.vigenciaDias=+el("cfgVig").value||40;state.config.tarjetas={transfermovil:el("cfgTM").value.trim(),enzona:el("cfgEZ").value.trim(),banco:el("cfgBanco").value.trim()};state.config.instrucciones=el("cfgInstr").value.trim();save();renderAll();toast("Configuración guardada en este dispositivo")}
+function borrarTodo(){if(!confirm("¿Borrar TODOS los datos del sistema en este dispositivo?"))return;if(!confirm("Confirmación final: esta acción no se puede deshacer. ¿Continuar?"))return;localStorage.removeItem(LSKEY);location.reload()}
+function sincronizarAhora(){updateConn();if(state.config.telegram.token)syncTelegram();flushQueue();if(!state.config.telegram.token)toast("Configure el bot de Telegram en Config para la ingesta en vivo")}
+function flushQueue(){if(!state.queue.length||!navigator.onLine||!state.config.telegram.token)return;var pend=[];var i=0;function nxt(){if(i>=state.queue.length){state.queue=pend;save();renderAll();if(!pend.length)toast("Cola enviada a Telegram: todo sincronizado");else toast(pend.length+" elementos siguen en cola");return}
+var q=state.queue[i++];tgPost("sendMessage",{chat_id:q.chatId,text:q.text}).then(function(r){if(!r||!r.ok)pend.push(q)}).catch(function(){pend.push(q)}).then(nxt)}nxt()}
+function autoSync(){if(!navigator.onLine||!state.config.telegram.token)return;tgCall("getUpdates","offset="+(state.telegram.offset||0)+"&limit=20").then(function(r){if(!r||!r.ok)return;var n=0;(r.result||[]).forEach(function(u){var m=u.message;if(m&&m.text){addIngesta("TELEGRAM",(m.from&&(m.from.first_name||m.from.username))||"desconocido",m.text);n++}});if(r.result&&r.result.length)state.telegram.offset=r.result[r.result.length-1].update_id+1;if(n){save();renderAll();toast("Telegram: "+n+" mensajes nuevos")}}).catch(function(){})}
+function runDiag(){var out=el("diagOut");out.innerHTML='<p class="small">Ejecutando pruebas…</p>';var rows=[];
+function add(n,ok,msg){rows.push('<div class="item"><b>'+(ok?"OK · ":"FALLO · ")+esc(n)+"</b><div class='meta'>"+esc(msg)+"</div></div>");out.innerHTML=rows.join("")}
+function t(n,fn){return fn().then(function(m){add(n,true,m)}).catch(function(e){add(n,false,(e&&e.message)||"falló")})}
+var chain=Promise.resolve();
+chain=chain.then(function(){return t("Conexión del dispositivo",function(){return new Promise(function(res,rej){if(navigator.onLine)res("El dispositivo reporta conexión activa");else rej(new Error("sin conexión: activa datos móviles o WiFi"))})})});
+chain=chain.then(function(){return t("Geolocalización (permiso y contexto seguro)",function(){return new Promise(function(res,rej){if(!("geolocation" in navigator))rej(new Error("este navegador no tiene geolocalización"));else if(!window.isSecureContext)rej(new Error("bloqueada: la app debe abrirse por https (enlace publicado), no como archivo"));else res("disponible en este contexto; Chrome pedirá permiso al usarla")})})});
+chain=chain.then(function(){return t("Mapa satelital (Esri)",function(){var z=10,x=Math.floor(lon2x(MAP.lon,z)/256),y=Math.floor(lat2y(MAP.lat,z)/256);return fetch("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/"+z+"/"+y+"/"+x).then(function(r){if(!r.ok)throw new Error("el servidor respondió "+r.status);return r.blob()}).then(function(b){return "mosaico descargado ("+b.size+" bytes) y guardado para uso sin conexión"})})});
+chain=chain.then(function(){return t("Clima real (Open-Meteo)",function(){return fetch("https://api.open-meteo.com/v1/forecast?latitude=23.13&longitude=-82.38&current=temperature_2m&timezone=auto").then(function(r){return r.json()}).then(function(d){if(!d||!d.current)throw new Error("respuesta incompleta");return "temperatura de La Habana recibida: "+d.current.temperature_2m+" °C"})})});
+chain=chain.then(function(){return t("Geocodificador (Nominatim)",function(){return fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&q=Santa%20Clara,%20Cuba").then(function(r){return r.json()}).then(function(a){if(!a||!a.length)throw new Error("sin respuesta");return "responde correctamente"})})});
+chain=chain.then(function(){return t("Telegram",function(){if(!state.config.telegram.token)return Promise.reject(new Error("sin token: guárdalo en Config (ver instrucciones aquí debajo)"));return tgCall("getUpdates","offset=0&limit=1").then(function(r){if(!r||!r.ok)throw new Error((r&&r.description)||"token rechazado");return "token válido y conectado"})})});
+chain.catch(function(){})}
+function detectChatId(){var t=state.config.telegram.token;if(!t){toast("Guarde primero el token en Config");return}
+tgCall("getUpdates","offset=0&limit=50").then(function(r){if(!r||!r.ok){toast("Telegram: "+((r&&r.description)||"error"));return}
+var chats={};(r.result||[]).forEach(function(u){var m=u.message||u.channel_post;if(m&&m.chat)chats[m.chat.id]=m.chat});
+var ks=Object.keys(chats);
+el("chatList").innerHTML=ks.length?ks.map(function(k){var c=chats[k];var name=c.title||c.username||("chat "+k);return '<div class="item"><b>'+esc(name)+"</b><div class='meta'>ID: "+esc(String(k))+" · tipo: "+esc(c.type)+'</div><div class="act"><button class="btn2 btn" onclick="usarChat(\''+k+'\')">Usar este chat</button></div></div>'}).join(""):'<p class="small">No apareció ningún chat. Escribe primero un mensaje en el grupo (o al bot en privado) y reintenta.</p>'}).catch(function(){toast("No se pudo conectar con Telegram")})}
+function usarChat(k){el("cfgChat").value=String(k);state.config.telegram.chatId=String(k);save();toast("Chat configurado: "+k)}
+var TABS=[["inicio","Inicio"],["mapa","Mapa"],["clima","Clima"],["negocios","Negocios"],["necesidades","Necesidades"],["logistica","Logística"],["ingesta","Ingesta"],["cobros","Cobros"],["core","CORE"],["diag","Diagnóstico"],["config","Config"]];
+function buildNav(){var h="";TABS.forEach(function(t){h+='<button data-s="'+t[0]+'" onclick="show(\''+t[0]+'\')">'+t[1]+"</button>"});el("nav").innerHTML=h}
+function show(sec){var bs=document.querySelectorAll("nav button");for(var i=0;i<bs.length;i++)bs[i].className=(bs[i].getAttribute("data-s")===sec)?"act":"";var ss=document.querySelectorAll("main section");for(var j=0;j<ss.length;j++)ss[j].className=(ss[j].id==="sec-"+sec)?"show":"hide";if(sec==="mapa")drawMap()}
+var toastTimer=null;
+function toast(t){var d=el("toast");if(!d){d=document.createElement("div");d.id="toast";d.style.cssText="position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:#202124;color:#fff;padding:9px 16px;border-radius:20px;font-size:13px;z-index:99;max-width:90vw";document.body.appendChild(d)}d.textContent=t;d.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(function(){d.style.display="none"},3500)}
+function updateConn(){var on=navigator.onLine;var d=el("conn");if(d){d.textContent=on?"En línea":"Sin conexión";d.className="conn "+(on?"on":"off")}if(on)flushQueue()}
+function init(){openIDB().then(function(){fillProv("mprov");fillProv("cprov");fillMuniSel("mmuni","La Habana");fillMuniSel("cmuni","La Habana");fillMuniSel("nMuni","La Habana");fillMuniSel("neMuni","La Habana");el("nProv").value="La Habana";el("neProv").value="La Habana";bindMap();updateConn();show("inicio");renderAll();
+el("cfgToken").value=state.config.telegram.token||"";el("cfgChat").value=state.config.telegram.chatId||"";el("cfgCosto").value=state.config.costoCUP;el("cfgVig").value=state.config.vigenciaDias;el("cfgTM").value=state.config.tarjetas.transfermovil||"";el("cfgEZ").value=state.config.tarjetas.enzona||"";el("cfgBanco").value=state.config.tarjetas.banco||"";el("cfgInstr").value=state.config.instrucciones||"";
+window.addEventListener("online",updateConn);window.addEventListener("offline",updateConn);setInterval(function(){autoSync();updateConn()},120000)})}
+if("serviceWorker" in navigator&&location.protocol==="https:"){try{navigator.serviceWorker.register("verbum-hub-v2.sw.js")}catch(e){}}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init)}else{init()}
+</script>
+</body>
+</html>
